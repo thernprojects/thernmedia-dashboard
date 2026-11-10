@@ -216,6 +216,37 @@ html,body{height:100%;background:#060606;}
 .fin-row-val.pos{color:var(--green);}
 .fin-row-val.neg{color:var(--red);}
 .fin-row-val.gold{color:var(--gold);}
+
+/* OPS */
+.ops-page{padding:16px 20px 40px;}
+.ops-date{font-family:var(--mono);font-size:10px;color:var(--text3);margin-left:12px;}
+.ops-msg{font-family:var(--mono);font-size:11px;color:var(--gold);margin:12px 0;min-height:14px;}
+.ops-msg.err{color:var(--red);}
+.ops-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;}
+.ops-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:14px 16px;}
+.ops-card .plabel{margin-bottom:10px;}
+.ops-count{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--gold);}
+.ops-row{border-top:1px solid var(--border);padding:9px 0;display:flex;gap:10px;align-items:flex-start;}
+.ops-row:first-child{border-top:none;}
+.ops-main{flex:1;min-width:0;}
+.ops-title{font-size:12px;font-weight:700;color:var(--text);overflow:hidden;text-overflow:ellipsis;}
+.ops-sub{font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:3px;line-height:1.5;}
+.ops-empty{font-size:11px;color:var(--text3);padding:6px 0;}
+.ops-tag{font-family:var(--mono);font-size:9px;border-radius:4px;padding:2px 6px;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;}
+.ops-tag.red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-dim);}
+.ops-tag.gold{background:var(--gold-dark);color:var(--gold);border:1px solid var(--gold-dim);}
+.ops-tag.green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-dim);}
+.ops-act{background:var(--bg3);border:1px solid var(--border2);color:var(--text2);font-family:var(--sans);font-size:10px;border-radius:4px;padding:4px 8px;cursor:pointer;white-space:nowrap;}
+.ops-act:hover{color:var(--gold);border-color:var(--gold-dim);}
+.ops-forms{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.ops-form{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.ops-form .full{grid-column:1 / -1;}
+.ops-form label{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;display:block;margin-bottom:3px;}
+.ops-form input,.ops-form select{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:5px;color:var(--text);font-family:var(--sans);font-size:12px;padding:7px 9px;outline:none;}
+.ops-form input:focus,.ops-form select:focus{border-color:var(--gold-dim);}
+.ops-submit{grid-column:1 / -1;background:var(--gold);color:#000;border:none;border-radius:5px;font-family:var(--sans);font-weight:700;font-size:12px;padding:9px;cursor:pointer;}
+.ops-submit:disabled{opacity:.5;cursor:default;}
+@media(max-width:900px){.ops-grid,.ops-forms{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
@@ -225,6 +256,7 @@ html,body{height:100%;background:#060606;}
   <div class="tabs">
     <button class="tab active" onclick="switchTab('home')">Home</button>
     <button class="tab" onclick="switchTab('resale')">Resale</button>
+    <button class="tab" onclick="switchTab('ops')">Ops</button>
     <button class="tab" onclick="switchTab('content')">Content</button>
     <button class="tab" onclick="switchTab('finance')">Finance</button>
   </div>
@@ -429,6 +461,58 @@ html,body{height:100%;background:#060606;}
         <tr class="loading-row"><td colspan="10">Loading inventory from Google Sheets...</td></tr>
       </tbody>
     </table>
+  </div>
+</div>
+
+<!-- ===== OPS ===== -->
+<div id="page-ops" class="page ops-page">
+  <div class="r-topbar">
+    <h2>Ops Agenda</h2>
+    <span class="ops-date" id="ops-date"></span>
+    <button class="r-btn" style="margin-left:auto;" onclick="loadOps()">Refresh</button>
+    <button class="r-btn" onclick="opsSetKey()">Passcode</button>
+  </div>
+  <div class="ops-msg" id="ops-msg"></div>
+
+  <div class="ops-grid">
+    <div class="ops-card"><div class="plabel"><span class="n">01</span> Items to ship today <span class="ops-count" id="oc-ship">0</span></div><div id="ol-ship"></div></div>
+    <div class="ops-card"><div class="plabel"><span class="n">02</span> Packages arriving today <span class="ops-count" id="oc-arrive">0</span></div><div id="ol-arrive"></div></div>
+    <div class="ops-card"><div class="plabel"><span class="n">03</span> Urgent returns due <span class="ops-count" id="oc-return">0</span></div><div id="ol-return"></div></div>
+  </div>
+
+  <div class="ops-forms">
+    <div class="ops-card">
+      <div class="plabel"><span class="n">+</span> Add a purchase</div>
+      <div class="ops-form">
+        <div><label>Store</label><select id="op-store" onchange="opsStoreChange()"><option>Ross</option><option>Amazon</option><option>Other</option></select></div>
+        <div id="op-other-wrap" style="display:none;"><label>Store name</label><input id="op-other" type="text"/></div>
+        <div class="full"><label>Item</label><input id="op-item" type="text" placeholder="What did you buy"/></div>
+        <div><label>Order or receipt number</label><input id="op-order" type="text"/></div>
+        <div><label>Purchase date</label><input id="op-date" type="date"/></div>
+        <div><label>Return window (days)</label><input id="op-window" type="number" min="0" value="30"/></div>
+        <div><label>Carrier</label><select id="op-carrier"><option value="">None</option><option>USPS</option><option>UPS</option><option>FedEx</option><option>Amazon</option><option>Other</option></select></div>
+        <div><label>Tracking number</label><input id="op-track" type="text"/></div>
+        <div><label>Arrives on</label><input id="op-eta" type="date"/></div>
+        <div class="full"><label>Receipt photo</label><input id="op-photo" type="file" accept="image/*" capture="environment"/></div>
+        <button class="ops-submit" id="op-submit" onclick="opsAddPurchase()">Save purchase</button>
+      </div>
+    </div>
+    <div class="ops-card">
+      <div class="plabel"><span class="n">+</span> Add a sale to ship</div>
+      <div class="ops-form">
+        <div><label>Platform</label><select id="os-platform"><option>eBay</option><option>Mercari</option><option>TikTok Shop</option><option>Facebook</option><option>OfferUp</option></select></div>
+        <div><label>Ship by</label><input id="os-shipby" type="date"/></div>
+        <div class="full"><label>Item</label><input id="os-item" type="text"/></div>
+        <div><label>Carrier</label><select id="os-carrier"><option value="">None</option><option>USPS</option><option>UPS</option><option>FedEx</option></select></div>
+        <div><label>Tracking number</label><input id="os-track" type="text"/></div>
+        <button class="ops-submit" id="os-submit" onclick="opsAddShipment()">Save sale</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ops-card">
+    <div class="plabel"><span class="n">04</span> All open returns <span class="ops-count" id="oc-open">0</span></div>
+    <div id="ol-open"></div>
   </div>
 </div>
 
@@ -736,9 +820,10 @@ function switchTab(tab) {
   document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
   document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
   document.getElementById('page-'+tab).classList.add('active');
-  var order=['home','resale','content','finance'];
+  var order=['home','resale','ops','content','finance'];
   document.querySelectorAll('.tab')[order.indexOf(tab)].classList.add('active');
   if (tab==='resale' && rawRows.length===0) loadSheet();
+  if (tab==='ops') loadOps();
   if (tab==='content') { renderCtPosts(); renderCtIdeas(); renderDoneTopics(); }
 }
 
@@ -917,6 +1002,174 @@ buildCalendar();
 buildHabits();
 updateHabitScore();
 buildTasks();
+// ===== OPS =====
+var OPS = { data: null, windows: { Ross: 30, Amazon: 30 } };
+
+function opsToday() { var d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 10); }
+function opsDays(from, to) { return Math.round((Date.parse(to) - Date.parse(from)) / 86400000); }
+function opsEsc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+function opsMsg(t, err) { var m = document.getElementById('ops-msg'); m.textContent = t || ''; m.className = 'ops-msg' + (err ? ' err' : ''); }
+function opsKey() { try { return localStorage.getItem('ops_key') || ''; } catch (e) { return ''; } }
+function opsSetKey() {
+  var k = prompt('Enter your Ops passcode');
+  if (k === null) return;
+  try { localStorage.setItem('ops_key', k.trim()); } catch (e) {}
+  loadOps();
+}
+
+async function opsCall(method, body) {
+  var res = await fetch('/api/ops', {
+    method: method,
+    headers: { 'Content-Type': 'application/json', 'x-ops-key': opsKey() },
+    body: body ? JSON.stringify(body) : undefined
+  });
+  var data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Request failed');
+  return data;
+}
+
+async function loadOps() {
+  document.getElementById('ops-date').textContent = new Date().toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
+  if (!opsKey()) { opsMsg('Tap Passcode to unlock the Ops tab.'); renderOps(); return; }
+  opsMsg('Loading...');
+  try {
+    var data = await opsCall('GET');
+    if (data.configured === false) {
+      opsMsg('Ops is not connected yet. Add SUPABASE_URL, SUPABASE_SERVICE_KEY and OPS_PASSCODE in Vercel, then redeploy.', true);
+      return;
+    }
+    OPS.data = data;
+    opsMsg('');
+    renderOps();
+  } catch (e) {
+    opsMsg(e.message, true);
+  }
+}
+
+function opsRow(title, sub, tag, tagClass, actions) {
+  var btns = actions.map(function (a) { return '<button class="ops-act" onclick="' + a[1] + '">' + a[0] + '</button>'; }).join('');
+  return '<div class="ops-row"><div class="ops-main"><div class="ops-title">' + opsEsc(title) + '</div><div class="ops-sub">' + sub + '</div></div>' +
+    (tag ? '<span class="ops-tag ' + tagClass + '">' + tag + '</span>' : '') + btns + '</div>';
+}
+
+function opsFill(id, countId, rows, emptyText) {
+  document.getElementById(id).innerHTML = rows.length ? rows.join('') : '<div class="ops-empty">' + emptyText + '</div>';
+  document.getElementById(countId).textContent = rows.length;
+}
+
+function renderOps() {
+  var d = OPS.data || { purchases: [], shipments: [] };
+  var today = opsToday();
+
+  // 01 Ship today: unshipped sales due today or already late
+  var ship = d.shipments.filter(function (x) { return x.status === 'to_ship' && x.ship_by <= today; }).map(function (x) {
+    var late = opsDays(x.ship_by, today);
+    var sub = opsEsc(x.platform) + (x.tracking_number ? ' / ' + opsEsc(x.carrier || '') + ' ' + opsEsc(x.tracking_number) : '');
+    return opsRow(x.item, sub, late > 0 ? late + 'd late' : 'Today', late > 0 ? 'red' : 'gold', [['Shipped', "opsUpdate('shipments','" + x.id + "',{status:'shipped'})"]]);
+  });
+  opsFill('ol-ship', 'oc-ship', ship, 'Nothing to ship today.');
+
+  // 02 Arriving today: inbound packages expected today, not marked delivered
+  var arrive = d.purchases.filter(function (x) { return !x.delivered && x.expected_delivery === today && x.status === 'open'; }).map(function (x) {
+    var sub = opsEsc(x.store) + (x.tracking_number ? ' / ' + opsEsc(x.carrier || '') + ' ' + opsEsc(x.tracking_number) : '');
+    return opsRow(x.item, sub, 'Today', 'green', [['Got it', "opsUpdate('purchases','" + x.id + "',{delivered:true})"]]);
+  });
+  opsFill('ol-arrive', 'oc-arrive', arrive, 'No packages due today.');
+
+  // 03 Urgent returns: open items whose deadline is within 3 days (or passed)
+  var open = d.purchases.filter(function (x) { return x.status === 'open'; });
+  var urgent = open.filter(function (x) { return opsDays(today, x.return_deadline) <= 3; }).map(function (x) { return opsReturnRow(x, today); });
+  opsFill('ol-return', 'oc-return', urgent, 'No returns due in the next 3 days.');
+
+  // 04 All open returns
+  var all = open.map(function (x) { return opsReturnRow(x, today); });
+  opsFill('ol-open', 'oc-open', all, 'No open purchases yet.');
+}
+
+function opsReturnRow(x, today) {
+  var left = opsDays(today, x.return_deadline);
+  var tag = left < 0 ? 'Expired' : left === 0 ? 'Due today' : left === 1 ? 'Due tomorrow' : left + ' days left';
+  var cls = left <= 1 ? 'red' : left <= 3 ? 'gold' : 'green';
+  var sub = opsEsc(x.store) + ' / bought ' + opsEsc(x.purchase_date) + ' / deadline ' + opsEsc(x.return_deadline) + (x.order_number ? ' / #' + opsEsc(x.order_number) : '') +
+    (x.receipt_url ? ' / <a href="' + opsEsc(x.receipt_url) + '" target="_blank" rel="noopener" style="color:var(--gold);">receipt</a>' : '');
+  return opsRow(x.item, sub, tag, cls, [
+    ['Returned', "opsUpdate('purchases','" + x.id + "',{status:'returned'})"],
+    ['Keeping', "opsUpdate('purchases','" + x.id + "',{status:'kept'})"]
+  ]);
+}
+
+async function opsUpdate(table, id, patch) {
+  try { await opsCall('POST', { action: 'update', table: table, id: id, patch: patch }); await loadOps(); }
+  catch (e) { opsMsg(e.message, true); }
+}
+
+function opsStoreChange() {
+  var v = document.getElementById('op-store').value;
+  document.getElementById('op-other-wrap').style.display = v === 'Other' ? 'block' : 'none';
+  if (OPS.windows[v]) document.getElementById('op-window').value = OPS.windows[v];
+}
+
+function opsReadPhoto(file, cb) {
+  var r = new FileReader();
+  r.onload = function () {
+    var img = new Image();
+    img.onload = function () {
+      var s = Math.min(1, 1600 / Math.max(img.width, img.height));
+      var c = document.createElement('canvas');
+      c.width = Math.round(img.width * s); c.height = Math.round(img.height * s);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      cb(c.toDataURL('image/jpeg', 0.8));
+    };
+    img.src = r.result;
+  };
+  r.readAsDataURL(file);
+}
+
+function opsAddPurchase() {
+  var store = document.getElementById('op-store').value;
+  if (store === 'Other') store = document.getElementById('op-other').value.trim();
+  var item = document.getElementById('op-item').value.trim();
+  if (!store || !item) { opsMsg('Add a store and an item first.', true); return; }
+  var purchase = {
+    store: store, item: item,
+    order_number: document.getElementById('op-order').value.trim(),
+    purchase_date: document.getElementById('op-date').value || opsToday(),
+    return_window_days: parseInt(document.getElementById('op-window').value, 10) || 30,
+    carrier: document.getElementById('op-carrier').value,
+    tracking_number: document.getElementById('op-track').value.trim(),
+    expected_delivery: document.getElementById('op-eta').value
+  };
+  var btn = document.getElementById('op-submit');
+  var file = document.getElementById('op-photo').files[0];
+  btn.disabled = true; btn.textContent = 'Saving...';
+  function send(receipt) {
+    opsCall('POST', { action: 'add_purchase', purchase: purchase, receipt: receipt || null }).then(function () {
+      ['op-item', 'op-order', 'op-track', 'op-eta', 'op-photo'].forEach(function (id) { document.getElementById(id).value = ''; });
+      opsMsg('Purchase saved.');
+      return loadOps();
+    }).catch(function (e) { opsMsg(e.message, true); }).then(function () { btn.disabled = false; btn.textContent = 'Save purchase'; });
+  }
+  if (file) opsReadPhoto(file, send); else send(null);
+}
+
+function opsAddShipment() {
+  var item = document.getElementById('os-item').value.trim();
+  var shipBy = document.getElementById('os-shipby').value || opsToday();
+  if (!item) { opsMsg('Add an item first.', true); return; }
+  var btn = document.getElementById('os-submit');
+  btn.disabled = true;
+  opsCall('POST', { action: 'add_shipment', shipment: {
+    platform: document.getElementById('os-platform').value, item: item, ship_by: shipBy,
+    carrier: document.getElementById('os-carrier').value, tracking_number: document.getElementById('os-track').value.trim()
+  } }).then(function () {
+    ['os-item', 'os-track'].forEach(function (id) { document.getElementById(id).value = ''; });
+    opsMsg('Sale saved.');
+    return loadOps();
+  }).catch(function (e) { opsMsg(e.message, true); }).then(function () { btn.disabled = false; });
+}
+
+document.getElementById('op-date').value = opsToday();
+
 // Auto-load sheet on startup for Finance Pulse
 loadSheet().catch(function(){});
 </script>
