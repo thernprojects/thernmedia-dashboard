@@ -164,7 +164,7 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-grad
 .r-btn{background:var(--bg3);border:1px solid var(--border2);color:var(--gold);font-family:var(--sans);font-size:13px;padding:6px 14px;border-radius:5px;cursor:pointer;font-weight:700;white-space:nowrap;}
 .r-btn:hover{background:var(--bg4);}
 .inv-table-wrap{overflow:auto;flex:1;}
-.inv-table{width:100%;border-collapse:collapse;font-size:13px;}
+.inv-table{width:100%;min-width:1250px;border-collapse:collapse;font-size:13px;}
 .inv-table th{background:var(--bg2);color:var(--text3);font-size:12px;text-transform:uppercase;letter-spacing:.1em;padding:8px 11px;text-align:left;position:sticky;top:0;z-index:10;border-bottom:1px solid var(--border);white-space:nowrap;font-weight:400;cursor:pointer;user-select:none;}
 .inv-table th:hover{color:var(--text2);}
 .inv-table td{padding:9px 11px;border-bottom:1px solid var(--border);vertical-align:middle;color:var(--text2);}
@@ -184,7 +184,7 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-grad
 .plat-kept{background:#08261f;color:#3ee6a8;border:1px solid #14573f;}
 .profit-pos{color:var(--green);font-family:var(--mono);font-size:13px;}
 .profit-neg{color:var(--red);font-family:var(--mono);font-size:13px;}
-.profit-zero{color:var(--text3);font-family:var(--mono);font-size:13px;}
+.profit-zero{color:var(--text);font-family:var(--mono);font-size:13px;}
 .warn-badge{background:#33200c;color:#ffb86b;border:1px solid #8a4a10;padding:2px 6px;border-radius:3px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;}
 .note-cell{background:none;border:none;border-bottom:1px solid var(--border);outline:none;color:var(--text2);font-family:var(--sans);font-size:13px;width:120px;padding:2px 4px;}
 .note-cell::placeholder{color:var(--border2);}
@@ -353,6 +353,16 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-grad
 .hud-mid .hud{flex:1;text-align:center;}
 @media(max-width:1000px){.hud-wrap{grid-template-columns:1fr;}.hud-core{order:-1;}}
 @media(max-width:700px){.brand,.topbar-right{display:none;}.topbar{padding:0 6px;}.tabs{width:100%;justify-content:space-around;}.tab{padding:0 8px;font-size:12px;}.home-grid{grid-template-columns:1fr !important;}.home-grid>.panel{grid-column:1 !important;grid-row:auto !important;}}
+.ed{cursor:text;white-space:nowrap;}
+.ed:hover{box-shadow:inset 0 0 0 1px rgba(79,216,255,.45);}
+.cell-in{width:100%;min-width:72px;background:var(--bg4);color:var(--text);border:1px solid var(--gold);border-radius:3px;padding:4px 6px;font:inherit;outline:none;}
+.inv-src{font-family:var(--mono);font-size:12px;color:var(--text3);}
+.inv-src.err{color:var(--red);}.inv-src.ok{color:var(--green);}
+.add-panel{display:none;gap:6px;flex-wrap:wrap;padding:10px 18px;border-bottom:1px solid var(--border);background:var(--bg2);}
+.add-panel.open{display:flex;}
+.add-panel input,.add-panel select{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:7px 9px;color:var(--text);font-family:var(--sans);font-size:13px;outline:none;min-width:90px;flex:1;}
+.add-panel input.wide{flex:3;min-width:200px;}
+.inv-table td.profit-pos{color:var(--green);}.inv-table td.profit-neg{color:var(--red);}.inv-table td.profit-zero{color:var(--text);}
 </style>
 </head>
 <body>
@@ -544,13 +554,13 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-grad
 <!-- ===== RESALE ===== -->
 <div id="page-resale" class="page resale-page">
   <div class="r-topbar">
-    <h2>Inventory - Live from Google Sheets</h2>
+    <h2>Inventory</h2><span class="inv-src" id="inv-src">Loading from your Google Sheet...</span>
     <button class="rtab active" id="rf-all" onclick="setFilter('all')">All</button>
     <button class="rtab" id="rf-unsold" onclick="setFilter('unsold')">Unsold</button>
     <button class="rtab" id="rf-sold" onclick="setFilter('sold')">Sold</button>
     <button class="rtab" id="rf-return" onclick="setFilter('return')">Returned</button>
     <button class="rtab" id="rf-warn" onclick="setFilter('warn')">! Cant Return</button>
-    <button class="r-btn" onclick="loadSheet()" style="margin-left:auto;">Refresh</button>
+    <button class="r-btn" onclick="toggleAdd()" style="margin-left:auto;">+ Add item</button><button class="r-btn" onclick="loadSheet()">Refresh</button>
     <span style="font-family:var(--mono);font-size:12px;color:var(--text3);" id="inv-count">--</span>
   </div>
   <div class="r-stats">
@@ -580,17 +590,28 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-grad
       <option value="name-asc">Name A-Z</option>
     </select>
   </div>
+  <div class="add-panel" id="add-panel">
+    <input class="wide" id="ad-item" placeholder="Item name"/>
+    <input id="ad-from" placeholder="Purchased from"/>
+    <input id="ad-size" placeholder="Size"/>
+    <input id="ad-sub" placeholder="Subtotal" inputmode="decimal"/>
+    <input id="ad-tax" placeholder="Tax" inputmode="decimal"/>
+    <input id="ad-ship" placeholder="Shipping" inputmode="decimal"/>
+    <select id="ad-status"></select>
+    <input id="ad-pay" placeholder="Paid with"/>
+    <input id="ad-bought" placeholder="Date bought (7/13/2026)"/>
+    <input id="ad-order" placeholder="Order # or note"/>
+    <button class="r-btn" onclick="addItem()">Save to Sheet</button>
+  </div>
   <div class="inv-table-wrap">
     <table class="inv-table">
       <thead>
         <tr>
-          <th>Item</th><th>From</th><th>Size</th>
-          <th>Cost</th><th>Sold For</th><th>Profit</th>
-          <th>Platform</th><th>Date Sold</th><th>Status</th><th>Notes</th>
+          <th>Item</th><th>From</th><th>Size</th><th>Subtotal</th><th>Tax</th><th>Ship</th><th>Cost</th><th>Sold For</th><th>Profit</th><th>Status</th><th>Paid with</th><th>Bought</th><th>Sold</th><th>Order # / Notes</th>
         </tr>
       </thead>
       <tbody id="inv-body">
-        <tr class="loading-row"><td colspan="10">Loading inventory from Google Sheets...</td></tr>
+        <tr class="loading-row"><td colspan="14">Loading inventory from Google Sheets...</td></tr>
       </tbody>
     </table>
   </div>
@@ -748,19 +769,21 @@ function fmtFull(n) {
 }
 
 async function loadSheet(silent) {
-  if(!silent) document.getElementById('inv-body').innerHTML = '<tr class="loading-row"><td colspan="10">Loading inventory...</td></tr>';
+  if(!silent) document.getElementById('inv-body').innerHTML = '<tr class="loading-row"><td colspan="14">Loading inventory...</td></tr>';
   try {
     var res = await fetch(CSV_URL + '?t=' + Date.now());
     var data = await res.json();
+    SHEET_EDIT = !!(data['Inventory'] && data['Inventory'][0] && data['Inventory'][0]._row);
+    setInvSrc(SHEET_EDIT ? 'Click any cell to edit. Saves to your Google Sheet. Updated ' + new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'}) : 'Read only. Sheet script not installed yet. Updated ' + new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'}));
     allSheetData = data;
     // Inventory is now an array of objects
     var inv = data['Inventory'] || [];
     rawRows = parseRows(inv);
-    renderTable();
+    if(!invEditing) renderTable();
     updateLiveNumbers(data);
   } catch(e) {
     if(silent) return;
-    document.getElementById('inv-body').innerHTML = '<tr class="loading-row"><td colspan="10">Error: ' + e.message + '</td></tr>';
+    document.getElementById('inv-body').innerHTML = '<tr class="loading-row"><td colspan="14">Error: ' + e.message + '</td></tr>';
   }
 }
 
@@ -783,7 +806,7 @@ function parseRows(rows) {
     var dateSold = String(n['Date Sold'] || '').trim();
     var orderNum = String(n['Order #'] || '').trim();
     var warn = orderNum.toUpperCase().indexOf('CANT RETURN') >= 0 ? 'CANT RETURN' : '';
-    result.push({item:item, from:from, size:size, cost:cost, soldAmt:soldAmt, profit:profit, status:status, dateSold:dateSold, orderNum:orderNum, warn:warn, _idx:i});
+    result.push({item:item, from:from, size:size, cost:cost, soldAmt:soldAmt, profit:profit, status:status, dateSold:dateSold, orderNum:orderNum, warn:warn, _idx:i, _row:r._row, sub:n['Subtotal'], tax:n['Tax'], ship:n['Shipping Cost'], pay:String(n['Payment Method']||'').trim(), bought:String(n['Date Purchase']||'').split('T')[0]});
   }
   return result;
 }
@@ -912,7 +935,7 @@ function renderTable() {
 
   document.getElementById('inv-count').textContent = rows.length + ' items';
   var body = document.getElementById('inv-body');
-  if (!rows.length) { body.innerHTML = '<tr class="loading-row"><td colspan="10">No items match.</td></tr>'; return; }
+  if (!rows.length) { body.innerHTML = '<tr class="loading-row"><td colspan="14">No items match.</td></tr>'; return; }
 
   body.innerHTML = rows.map(function(r) {
     var sl = r.status || 'Unsold';
@@ -929,21 +952,26 @@ function renderTable() {
     else if(sl==='Kept') pc='plat-kept';
     else if(sl!=='Unsold') pc='plat-inperson';
     var profClass = r.profit>0.1?'profit-pos':r.profit<-0.1?'profit-neg':'profit-zero';
-    var ps = r.profit>0?'+':'';
-    var idx = r._idx;
-    var noteVal = (notes[idx]||'').replace(/"/g,'&quot;');
+    var ps = r.profit>0.1?'+':'';
+    var can = SHEET_EDIT && r._row;
+    var mon=function(v){var n=parseMoney(v);return (v===''||v==null)?'--':'$'+n.toFixed(2);};
+    var ed=function(f,disp,raw,cls,style){return '<td class="'+(can?'ed ':'')+(cls||'')+'"'+(can?' data-row="'+r._row+'" data-f="'+f+'" data-v="'+opsEsc(String(raw==null?'':raw))+'"':'')+(style?' style="'+style+'"':'')+'>'+disp+'</td>';};
+    var mono='font-family:var(--mono);font-size:12px;';
     return '<tr>'
-      +'<td><span class="item-name" title="'+r.item+'">'+r.item+'</span></td>'
-      +'<td>'+r.from+'</td>'
-      +'<td>'+r.size+'</td>'
+      +ed('Item','<span class="item-name" title="'+opsEsc(r.item)+'">'+opsEsc(r.item)+'</span>',r.item)
+      +ed('Purchased From',opsEsc(r.from),r.from)
+      +ed('Size',opsEsc(r.size),r.size)
+      +ed('Subtotal',mon(r.sub),parseMoney(r.sub)||'',null,mono)
+      +ed('Tax',mon(r.tax),parseMoney(r.tax)||'',null,mono)
+      +ed('Shipping Cost',mon(r.ship),parseMoney(r.ship)||'',null,mono)
       +'<td class="profit-zero">$'+r.cost.toFixed(2)+'</td>'
-      +'<td class="profit-zero">'+(r.soldAmt?'$'+r.soldAmt.toFixed(2):'--')+'</td>'
-      +'<td class="'+profClass+'">'+ps+'$'+r.profit.toFixed(2)+'</td>'
-      +'<td><span class="pill-s '+pc+'">'+sl+'</span></td>'
-      +'<td style="font-family:var(--mono);font-size:12px;color:var(--text3);">'+(r.dateSold?r.dateSold.split('T')[0]:'--')+'</td>'
-      +'<td><span class="pill-s '+pc+'">'+sl+'</span></td>'
-      +'<td>'+(r.warn?'<span class="warn-badge">! '+r.warn+'</span>':'')
-      +'<input class="note-cell" placeholder="Note..." value="'+noteVal+'" oninput="notes['+idx+']=this.value"/></td>'
+      +ed('Sold Amount',(r.soldAmt?'$'+r.soldAmt.toFixed(2):'--'),r.soldAmt||'',null,mono)
+      +'<td class="'+profClass+'" style="font-family:var(--mono);font-size:13px;">'+(r.profit<0?'-':ps)+'$'+Math.abs(r.profit).toFixed(2)+'</td>'
+      +ed('Status','<span class="pill-s '+pc+'">'+opsEsc(sl)+'</span>',r.status)
+      +ed('Payment Method',opsEsc(r.pay),r.pay)
+      +ed('Date Purchase',r.bought||'--',r.bought,null,mono+'color:var(--text3);')
+      +ed('Date Sold',r.dateSold?opsEsc(r.dateSold.split('T')[0]):'--',r.dateSold?r.dateSold.split('T')[0]:'',null,mono+'color:var(--text3);')
+      +ed('Order #',(r.warn?'<span class="warn-badge">! '+r.warn+'</span> ':'')+opsEsc(r.orderNum),r.orderNum)
       +'</tr>';
   }).join('');
 }
@@ -1044,6 +1072,52 @@ function cmdRun(q){
   mic.onclick=function(){try{mic.classList.add('rec');rec.start();}catch(e){mic.classList.remove('rec');}};
 })();
 Globe.init();Globe.start();
+
+// ===== SHEET EDITING =====
+var SHEET_EDIT=false, invEditing=false;
+var INV_STATUS=['Unsold','Return/Cancel','Kept','Mercari','Ebay','In Person','StockX','Cashout','FBT Tiktok','Whatnot','Locations Sold','OfferUp','Facebook'];
+function setInvSrc(t,cls){var e=document.getElementById('inv-src');if(e){e.textContent=t;e.className='inv-src'+(cls?' '+cls:'');}}
+function statusOptions(cur){var l=INV_STATUS.slice();if(cur&&l.indexOf(cur)<0)l.push(cur);return l;}
+(function(){var sel=document.getElementById('ad-status');if(sel)sel.innerHTML=INV_STATUS.map(function(x){return '<option>'+x+'</option>';}).join('');})();
+function toggleAdd(){document.getElementById('add-panel').classList.toggle('open');}
+function sheetPost(body){
+  if(!opsKey()) return Promise.reject(new Error('Set your passcode on the Ops tab first.'));
+  return fetch('/api/sheetedit',{method:'POST',headers:{'Content-Type':'application/json','x-ops-key':opsKey()},body:JSON.stringify(body)}).then(function(r){return r.json();}).then(function(j){if(j.error)throw new Error(j.error);return j;});
+}
+function startEdit(td){
+  var f=td.dataset.f,v=td.dataset.v||'',el;
+  if(f==='Status'){el=document.createElement('select');statusOptions(v).forEach(function(o){var op=document.createElement('option');op.textContent=o;if(o===v)op.selected=true;el.appendChild(op);});}
+  else{el=document.createElement('input');el.value=v;}
+  el.className='cell-in';td.innerHTML='';td.appendChild(el);el.focus();if(el.select&&f!=='Status')el.select();
+  invEditing=true;var done=false;
+  function finish(save){if(done)return;done=true;invEditing=false;if(save&&el.value!==v)commitEdit(td,el.value);else renderTable();}
+  el.addEventListener('blur',function(){finish(true);});
+  el.addEventListener('keydown',function(ev){if(ev.key==='Enter')el.blur();if(ev.key==='Escape')finish(false);});
+  if(f==='Status')el.addEventListener('change',function(){el.blur();});
+}
+function commitEdit(td,val){
+  var row=+td.dataset.row,f=td.dataset.f;
+  var r=rawRows.filter(function(x){return x._row===row;})[0];
+  if(!r){renderTable();return;}
+  setInvSrc('Saving to your Google Sheet...');
+  sheetPost({action:'edit',row:row,field:f,value:val,expectItem:r.item}).then(function(j){
+    var p=j.row?parseRows([j.row])[0]:null;
+    if(p){var keep=r._idx;Object.keys(p).forEach(function(k){r[k]=p[k];});r._idx=keep;}
+    renderTable();setInvSrc('Saved to your Google Sheet','ok');
+    setTimeout(function(){loadSheet(true);},1200);
+  }).catch(function(e){renderTable();setInvSrc(e.message,'err');});
+}
+function addItem(){
+  var g=function(i){return document.getElementById(i).value.trim();};
+  var f={'Item':g('ad-item'),'Purchased From':g('ad-from'),'Size':g('ad-size'),'Subtotal':g('ad-sub'),'Tax':g('ad-tax'),'Shipping Cost':g('ad-ship'),'Status':g('ad-status'),'Payment Method':g('ad-pay'),'Date Purchase':g('ad-bought'),'Order #':g('ad-order')};
+  if(!f['Item']){setInvSrc('Type an item name first.','err');return;}
+  setInvSrc('Adding to your Google Sheet...');
+  sheetPost({action:'add',fields:f}).then(function(){
+    ['ad-item','ad-from','ad-size','ad-sub','ad-tax','ad-ship','ad-pay','ad-bought','ad-order'].forEach(function(i){document.getElementById(i).value='';});
+    setInvSrc('Added to your Google Sheet','ok');loadSheet(true);
+  }).catch(function(e){setInvSrc(e.message,'err');});
+}
+document.getElementById('inv-body').addEventListener('click',function(e){var td=e.target.closest&&e.target.closest('td.ed');if(!td||td.querySelector('input,select'))return;startEdit(td);});
 
 function switchTab(tab) {
   document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
