@@ -7,28 +7,28 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;background:#060606;}
+html,body{height:100%;background:var(--bg);}
 :root{
-  --gold:#c8a96e;--gold-dim:#8b6914;--gold-dark:#3a2806;
-  --green:#3dba76;--green-dim:#1a5c38;--green-bg:#081a0e;
-  --red:#e05252;--red-dim:#6b1f1f;--red-bg:#1a0808;
-  --blue:#60a5fa;
-  --bg:#060606;--bg2:#0d0d0d;--bg3:#141414;--bg4:#1c1c1c;
-  --border:#1e1e1e;--border2:#2a2a2a;
-  --text:#e8e4dc;--text2:#b8b4ac;--text3:#6a6a6a;
-  --tab-h:42px;
+  --gold:#2563eb;--gold-dim:#93b4f5;--gold-dark:#e6eefe;
+  --green:#0a7a40;--green-dim:#9ad8b8;--green-bg:#e6f6ee;
+  --red:#c22222;--red-dim:#f2b1b1;--red-bg:#fdecec;
+  --blue:#2563eb;
+  --bg:#f4f6fb;--bg2:#ffffff;--bg3:#eef1f8;--bg4:#e3e8f3;
+  --border:#dde3ef;--border2:#c9d1e2;
+  --text:#141a2b;--text2:#33405c;--text3:#566079;
+  --tab-h:50px;
   --mono:'Space Mono',monospace;
   --sans:'Syne',sans-serif;
 }
-.os{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;font-size:13px;}
+.os{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;font-size:15px;}
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:var(--tab-h);border-bottom:1px solid var(--border);background:var(--bg2);position:sticky;top:0;z-index:200;}
-.brand{font-family:var(--mono);font-size:11px;color:var(--text3);letter-spacing:.12em;}
+.brand{font-family:var(--mono);font-size:13px;color:var(--text3);letter-spacing:.12em;}
 .brand span{color:var(--gold);}
 .tabs{display:flex;gap:2px;}
-.tab{background:none;border:none;color:var(--text3);font-family:var(--sans);font-size:11px;padding:0 14px;height:var(--tab-h);cursor:pointer;letter-spacing:.06em;text-transform:uppercase;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;}
+.tab{background:none;border:none;color:var(--text3);font-family:var(--sans);font-size:13px;padding:0 14px;height:var(--tab-h);cursor:pointer;letter-spacing:.06em;text-transform:uppercase;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;}
 .tab:hover{color:var(--text2);}
 .tab.active{color:var(--gold);border-bottom-color:var(--gold);}
-.topbar-right{font-family:var(--mono);font-size:10px;color:var(--text3);}
+.topbar-right{font-family:var(--mono);font-size:12px;color:var(--text3);}
 .topbar-right span{color:var(--gold);}
 .page{display:none;}
 .page.active{display:block;}
@@ -36,48 +36,48 @@ html,body{height:100%;background:#060606;}
 /* HOME */
 .home-grid{display:grid;grid-template-columns:265px 1fr 235px;grid-template-rows:auto auto auto;gap:1px;background:var(--border);min-height:calc(100vh - var(--tab-h));}
 .panel{background:var(--bg);padding:15px 17px;}
-.plabel{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:.15em;text-transform:uppercase;margin-bottom:13px;display:flex;align-items:center;gap:6px;}
+.plabel{font-family:var(--mono);font-size:12px;color:var(--text3);letter-spacing:.15em;text-transform:uppercase;margin-bottom:13px;display:flex;align-items:center;gap:6px;}
 .plabel .n{color:var(--gold);}
-.avatar{width:42px;height:42px;border-radius:9px;background:linear-gradient(135deg,var(--gold),var(--gold-dim));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;color:#000;margin-bottom:9px;}
-.op-name{font-size:17px;font-weight:800;font-style:italic;}
-.op-sub{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:11px;}
+.avatar{width:42px;height:42px;border-radius:9px;background:linear-gradient(135deg,var(--gold),var(--gold-dim));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:17px;color:#fff;margin-bottom:9px;}
+.op-name{font-size:18px;font-weight:800;font-style:italic;}
+.op-sub{font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:11px;}
 .online-dot{width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;margin-right:4px;}
-.focus-txt{font-size:11px;color:#555;border-left:2px solid var(--border);padding-left:8px;margin:9px 0;line-height:1.5;}
+.focus-txt{font-size:13px;color:var(--text3);border-left:2px solid var(--border);padding-left:8px;margin:9px 0;line-height:1.5;}
 .divider{height:1px;background:var(--border);margin:11px 0;}
 .stat-row{display:flex;gap:16px;margin-bottom:11px;}
-.stat label{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;display:block;margin-bottom:2px;}
-.stat .v{font-size:13px;font-weight:700;color:var(--gold);}
+.stat label{font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;display:block;margin-bottom:2px;}
+.stat .v{font-size:15px;font-weight:700;color:var(--gold);}
 .pills{display:flex;gap:4px;flex-wrap:wrap;}
-.pill{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:3px 8px;font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;}
+.pill{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:3px 8px;font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;}
 .pill span{font-family:var(--mono);color:var(--gold);font-weight:700;}
 .greeting{font-size:26px;font-weight:800;line-height:1.1;margin-bottom:4px;}
 .greeting em{font-style:italic;color:var(--gold);}
-.session-meta{font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:13px;}
+.session-meta{font-family:var(--mono);font-size:12px;color:var(--text3);margin-bottom:13px;}
 .clock{font-family:var(--mono);font-size:36px;font-weight:700;letter-spacing:-.02em;line-height:1;}
-.clock sup{font-size:13px;color:var(--text3);vertical-align:super;}
+.clock sup{font-size:15px;color:var(--text3);vertical-align:super;}
 .capture-bar{display:flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:8px 12px;margin-top:11px;}
-.capture-bar input{background:none;border:none;outline:none;color:var(--text);font-family:var(--sans);font-size:12px;flex:1;}
+.capture-bar input{background:none;border:none;outline:none;color:var(--text);font-family:var(--sans);font-size:14px;flex:1;}
 .capture-bar input::placeholder{color:var(--text3);}
-.cap-btn{background:var(--bg4);border:1px solid var(--border2);color:var(--gold);font-family:var(--mono);font-size:9px;padding:5px 10px;border-radius:4px;cursor:pointer;}
-.note-chip{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:5px 10px;font-size:11px;color:var(--text2);margin-top:5px;}
-.fp-badge{display:inline-flex;align-items:center;gap:4px;background:var(--green-bg);border:1px solid var(--green-dim);border-radius:4px;padding:2px 8px;font-family:var(--mono);font-size:10px;color:var(--green);margin-bottom:8px;}
+.cap-btn{background:var(--bg4);border:1px solid var(--border2);color:var(--gold);font-family:var(--mono);font-size:12px;padding:5px 10px;border-radius:4px;cursor:pointer;}
+.note-chip{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:5px 10px;font-size:13px;color:var(--text2);margin-top:5px;}
+.fp-badge{display:inline-flex;align-items:center;gap:4px;background:var(--green-bg);border:1px solid var(--green-dim);border-radius:4px;padding:2px 8px;font-family:var(--mono);font-size:12px;color:var(--green);margin-bottom:8px;}
 .fp-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:9px;}
 .fp-cell{background:var(--bg3);border-radius:6px;padding:8px 10px;}
-.fp-cell label{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;display:block;margin-bottom:3px;}
-.fp-cell .amt{font-family:var(--mono);font-size:14px;color:var(--gold);font-weight:700;}
-.fp-cell .sub{font-size:9px;color:var(--green);}
+.fp-cell label{font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;display:block;margin-bottom:3px;}
+.fp-cell .amt{font-family:var(--mono);font-size:15px;color:var(--gold);font-weight:700;}
+.fp-cell .sub{font-size:12px;color:var(--green);}
 .sparkline{width:100%;height:30px;margin:5px 0;}
 .ds-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px;}
 .ds-cell{background:var(--bg3);border-radius:6px;padding:8px 10px;}
-.ds-cell label{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;display:block;margin-bottom:3px;}
-.ds-cell input{background:none;border:none;border-bottom:1px solid var(--border);outline:none;color:var(--gold);font-family:var(--mono);font-size:15px;font-weight:700;width:100%;padding-bottom:2px;}
+.ds-cell label{font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;display:block;margin-bottom:3px;}
+.ds-cell input{background:none;border:none;border-bottom:1px solid var(--border);outline:none;color:var(--gold);font-family:var(--mono);font-size:16px;font-weight:700;width:100%;padding-bottom:2px;}
 .ds-total{background:var(--green-bg);border:1px solid var(--green-dim);border-radius:6px;padding:10px;margin-top:6px;display:flex;justify-content:space-between;align-items:center;}
-.ds-total label{font-size:9px;color:var(--green);text-transform:uppercase;letter-spacing:.1em;}
+.ds-total label{font-size:12px;color:var(--green);text-transform:uppercase;letter-spacing:.1em;}
 .ds-total .v{font-family:var(--mono);font-size:18px;color:var(--green);font-weight:700;}
 .habit-header{display:flex;align-items:center;gap:13px;margin-bottom:11px;}
-.h-score{width:44px;height:44px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:17px;font-weight:700;color:var(--text3);flex-shrink:0;transition:all .3s;}
+.h-score{width:44px;height:44px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:18px;font-weight:700;color:var(--text3);flex-shrink:0;transition:all .3s;}
 .h-score.on{border-color:var(--gold);color:var(--gold);}
-.h-meta{font-size:10px;color:var(--text3);line-height:1.6;}
+.h-meta{font-size:12px;color:var(--text3);line-height:1.6;}
 .h-meta strong{color:var(--text2);}
 .hbars{display:flex;gap:3px;margin-top:5px;}
 .hbar{flex:1;height:3px;background:var(--border);border-radius:1px;transition:background .3s;}
@@ -86,168 +86,232 @@ html,body{height:100%;background:#060606;}
 .hcard{background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:10px;cursor:pointer;transition:border-color .15s;}
 .hcard:hover{border-color:var(--border2);}
 .hcard.done{border-color:var(--green-dim);}
-.hcheck{width:13px;height:13px;border-radius:3px;border:1px solid var(--border2);margin-bottom:7px;display:flex;align-items:center;justify-content:center;font-size:9px;color:#000;font-weight:700;}
+.hcheck{width:13px;height:13px;border-radius:3px;border:1px solid var(--border2);margin-bottom:7px;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;font-weight:700;}
 .hcheck.on{background:var(--gold);border-color:var(--gold);}
-.hname{font-size:11px;font-weight:600;margin-bottom:2px;}
-.htag{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;}
-.hcount{font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:5px;}
+.hname{font-size:13px;font-weight:600;margin-bottom:2px;}
+.htag{font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;}
+.hcount{font-family:var(--mono);font-size:12px;color:var(--text3);margin-top:5px;}
 .titem{display:flex;align-items:flex-start;gap:8px;padding:7px 5px;border-radius:5px;cursor:pointer;transition:background .1s;}
 .titem:hover{background:var(--bg3);}
-.tcheck{width:13px;height:13px;border-radius:3px;border:1px solid var(--border2);flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#000;}
+.tcheck{width:13px;height:13px;border-radius:3px;border:1px solid var(--border2);flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;}
 .tcheck.on{background:var(--gold);border-color:var(--gold);}
-.tname{font-size:12px;color:#c8c8c0;line-height:1.3;}
+.tname{font-size:14px;color:var(--text2);line-height:1.3;}
 .tname.done{text-decoration:line-through;color:var(--text3);}
-.ttag{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-top:2px;}
-.tstar{font-size:10px;color:var(--border2);margin-left:auto;}
+.ttag{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-top:2px;}
+.tstar{font-size:12px;color:var(--border2);margin-left:auto;}
 .tstar.hi{color:var(--gold);}
 .task-add{display:flex;gap:5px;margin-top:9px;}
-.task-add input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:6px 10px;font-family:var(--sans);font-size:11px;color:var(--text);outline:none;}
+.task-add input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:6px 10px;font-family:var(--sans);font-size:13px;color:var(--text);outline:none;}
 .task-add input::placeholder{color:var(--text3);}
-.task-add button{background:var(--bg4);border:1px solid var(--border2);color:var(--gold);font-family:var(--mono);font-size:11px;padding:6px 11px;border-radius:5px;cursor:pointer;}
+.task-add button{background:var(--bg4);border:1px solid var(--border2);color:var(--gold);font-family:var(--mono);font-size:13px;padding:6px 11px;border-radius:5px;cursor:pointer;}
 .goals-list{display:flex;flex-direction:column;gap:8px;}
 .goal-item{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:10px;}
-.glabel{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;}
-.ginput{background:none;border:none;border-bottom:1px solid var(--border);outline:none;color:var(--text);font-family:var(--sans);font-size:12px;width:100%;padding-bottom:3px;}
+.glabel{font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;}
+.ginput{background:none;border:none;border-bottom:1px solid var(--border);outline:none;color:var(--text);font-family:var(--sans);font-size:14px;width:100%;padding-bottom:3px;}
 .ginput::placeholder{color:var(--border2);}
-.gsaved{font-size:12px;color:var(--gold);font-weight:600;}
-.gedit{font-size:9px;color:var(--text3);margin-top:3px;cursor:pointer;}
+.gsaved{font-size:14px;color:var(--gold);font-weight:600;}
+.gedit{font-size:12px;color:var(--text3);margin-top:3px;cursor:pointer;}
 .pbar{height:2px;background:var(--border);border-radius:1px;overflow:hidden;margin-top:7px;}
 .pfill{height:100%;background:var(--gold);border-radius:1px;transition:width .5s;}
 .cal-week{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:10px;}
 .cal-day{text-align:center;padding:4px 2px;border-radius:4px;}
-.cal-day .dn{font-size:9px;color:var(--text3);text-transform:uppercase;margin-bottom:3px;}
-.cal-day .dd{font-family:var(--mono);font-size:12px;color:var(--text3);}
+.cal-day .dn{font-size:12px;color:var(--text3);text-transform:uppercase;margin-bottom:3px;}
+.cal-day .dd{font-family:var(--mono);font-size:14px;color:var(--text3);}
 .cal-day.today{background:var(--gold);}
-.cal-day.today .dn,.cal-day.today .dd{color:#000;}
+.cal-day.today .dn,.cal-day.today .dd{color:#fff;}
 .cal-day.today .dd{font-weight:700;}
 .cal-event{display:flex;gap:7px;padding:6px 8px;border-radius:5px;background:var(--bg3);align-items:flex-start;margin-bottom:4px;}
 .cal-dot{width:6px;height:6px;border-radius:50%;margin-top:3px;flex-shrink:0;}
-.cal-time{font-family:var(--mono);font-size:9px;color:var(--text3);min-width:34px;margin-top:1px;}
-.cal-title{font-size:11px;color:#c8c8c0;}
+.cal-time{font-family:var(--mono);font-size:12px;color:var(--text3);min-width:34px;margin-top:1px;}
+.cal-title{font-size:13px;color:var(--text2);}
 .now-line{border-top:1px solid rgba(200,169,110,.2);display:flex;align-items:center;gap:6px;margin:3px 0;}
 .now-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);}
-.now-lbl{font-family:var(--mono);font-size:9px;color:var(--gold);}
+.now-lbl{font-family:var(--mono);font-size:12px;color:var(--gold);}
 .kcal-big{font-family:var(--mono);font-size:30px;font-weight:700;margin:5px 0 2px;transition:color .3s;}
-.kcal-lbl{font-size:10px;color:var(--text3);margin-bottom:7px;}
+.kcal-lbl{font-size:12px;color:var(--text3);margin-bottom:7px;}
 .macros{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:9px;}
-.macro{font-family:var(--mono);font-size:10px;color:var(--text3);}
+.macro{font-family:var(--mono);font-size:12px;color:var(--text3);}
 .nutr-bar{height:2px;background:var(--border);border-radius:1px;overflow:hidden;margin-bottom:9px;}
 .nutr-fill{height:100%;background:var(--gold);border-radius:1px;transition:width .5s;}
-.meal-input{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:7px 10px;font-family:var(--sans);font-size:11px;color:var(--text);width:100%;outline:none;margin-bottom:8px;}
+.meal-input{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:7px 10px;font-family:var(--sans);font-size:13px;color:var(--text);width:100%;outline:none;margin-bottom:8px;}
 .meal-input::placeholder{color:var(--text3);}
-.no-meals{font-size:10px;color:var(--border2);text-align:center;padding:10px 0;}
+.no-meals{font-size:12px;color:var(--border2);text-align:center;padding:10px 0;}
 .meal-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);}
-.meal-n{font-size:11px;color:var(--text2);}
-.meal-k{font-family:var(--mono);font-size:10px;color:var(--gold);}
+.meal-n{font-size:13px;color:var(--text2);}
+.meal-k{font-family:var(--mono);font-size:12px;color:var(--gold);}
 
 /* RESALE */
 .resale-page{flex-direction:column;height:calc(100vh - var(--tab-h));}
 .resale-page.active{display:flex;}
 .r-topbar{display:flex;align-items:center;gap:8px;padding:10px 18px;border-bottom:1px solid var(--border);background:var(--bg2);flex-shrink:0;flex-wrap:wrap;row-gap:6px;}
-.r-topbar h2{font-size:13px;font-weight:700;margin-right:4px;color:var(--text);}
-.rtab{background:none;border:1px solid var(--border);color:var(--text3);font-family:var(--sans);font-size:10px;padding:4px 10px;border-radius:4px;cursor:pointer;transition:all .15s;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;}
-.rtab.active{background:var(--gold);color:#000;border-color:var(--gold);}
+.r-topbar h2{font-size:15px;font-weight:700;margin-right:4px;color:var(--text);}
+.rtab{background:none;border:1px solid var(--border);color:var(--text3);font-family:var(--sans);font-size:12px;padding:4px 10px;border-radius:4px;cursor:pointer;transition:all .15s;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;}
+.rtab.active{background:var(--gold);color:#fff;border-color:var(--gold);}
 .r-stats{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--border);flex-shrink:0;}
 .rstat{background:var(--bg2);padding:10px 14px;}
-.rstat label{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;display:block;margin-bottom:3px;}
-.rstat .rv{font-family:var(--mono);font-size:16px;font-weight:700;color:var(--gold);}
+.rstat label{font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;display:block;margin-bottom:3px;}
+.rstat .rv{font-family:var(--mono);font-size:17px;font-weight:700;color:var(--gold);}
 .rstat .rv.pos{color:var(--green);}
 .rstat .rv.neg{color:var(--red);}
-.rstat .rsub{font-size:9px;color:var(--text3);}
+.rstat .rsub{font-size:12px;color:var(--text3);}
 .r-controls{display:flex;gap:6px;align-items:center;padding:10px 18px;border-bottom:1px solid var(--border);flex-shrink:0;flex-wrap:wrap;row-gap:6px;}
-.inv-search{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:6px 11px;font-family:var(--sans);font-size:12px;color:var(--text);outline:none;min-width:200px;flex:1;}
+.inv-search{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:6px 11px;font-family:var(--sans);font-size:14px;color:var(--text);outline:none;min-width:200px;flex:1;}
 .inv-search::placeholder{color:var(--text3);}
-.r-select{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:6px 10px;font-family:var(--sans);font-size:11px;color:var(--text2);outline:none;cursor:pointer;}
+.r-select{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:6px 10px;font-family:var(--sans);font-size:13px;color:var(--text2);outline:none;cursor:pointer;}
 .r-select option{background:var(--bg3);}
-.r-btn{background:var(--bg3);border:1px solid var(--border2);color:var(--gold);font-family:var(--sans);font-size:11px;padding:6px 14px;border-radius:5px;cursor:pointer;font-weight:700;white-space:nowrap;}
+.r-btn{background:var(--bg3);border:1px solid var(--border2);color:var(--gold);font-family:var(--sans);font-size:13px;padding:6px 14px;border-radius:5px;cursor:pointer;font-weight:700;white-space:nowrap;}
 .r-btn:hover{background:var(--bg4);}
 .inv-table-wrap{overflow:auto;flex:1;}
-.inv-table{width:100%;border-collapse:collapse;font-size:11px;}
-.inv-table th{background:var(--bg2);color:var(--text3);font-size:9px;text-transform:uppercase;letter-spacing:.1em;padding:8px 11px;text-align:left;position:sticky;top:0;z-index:10;border-bottom:1px solid var(--border);white-space:nowrap;font-weight:400;cursor:pointer;user-select:none;}
+.inv-table{width:100%;border-collapse:collapse;font-size:13px;}
+.inv-table th{background:var(--bg2);color:var(--text3);font-size:12px;text-transform:uppercase;letter-spacing:.1em;padding:8px 11px;text-align:left;position:sticky;top:0;z-index:10;border-bottom:1px solid var(--border);white-space:nowrap;font-weight:400;cursor:pointer;user-select:none;}
 .inv-table th:hover{color:var(--text2);}
 .inv-table td{padding:9px 11px;border-bottom:1px solid var(--border);vertical-align:middle;color:var(--text2);}
 .inv-table tr:hover td{background:var(--bg3);}
 .item-name{color:var(--text);font-weight:600;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.pill-s{display:inline-flex;align-items:center;padding:3px 8px;border-radius:3px;font-size:9px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;white-space:nowrap;}
-.plat-mercari{background:#2d1a4a;color:#b39ddb;border:1px solid #7e57c2;}
-.plat-ebay{background:#2a2200;color:#ffee58;border:1px solid #f9a825;}
-.plat-stockx{background:#001a2a;color:#64b5f6;border:1px solid #1976d2;}
-.plat-inperson{background:#0a2a0a;color:#81c784;border:1px solid #388e3c;}
-.plat-tiktok{background:#1a0a1a;color:#f48fb1;border:1px solid #c2185b;}
-.plat-cashout{background:#2a1a00;color:#ffb74d;border:1px solid #e65100;}
-.plat-whatnot{background:#0a0a2a;color:#ce93d8;border:1px solid #7b1fa2;}
-.plat-locations{background:#001a1a;color:#80deea;border:1px solid #00838f;}
-.plat-unsold{background:#141414;color:#6a6a6a;border:1px solid #1e1e1e;}
-.plat-return{background:#1a0808;color:#e05252;border:1px solid #6b1f1f;}
-.plat-kept{background:#3a2806;color:#c8a96e;border:1px solid #8b6914;}
-.profit-pos{color:var(--green);font-family:var(--mono);font-size:11px;}
-.profit-neg{color:var(--red);font-family:var(--mono);font-size:11px;}
-.profit-zero{color:var(--text3);font-family:var(--mono);font-size:11px;}
-.warn-badge{background:#1f1510;color:#e09052;border:1px solid #6b3a1f;padding:2px 6px;border-radius:3px;font-size:8px;text-transform:uppercase;letter-spacing:.06em;}
-.note-cell{background:none;border:none;border-bottom:1px solid var(--border);outline:none;color:var(--text2);font-family:var(--sans);font-size:11px;width:120px;padding:2px 4px;}
+.pill-s{display:inline-flex;align-items:center;padding:3px 8px;border-radius:3px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;white-space:nowrap;}
+.plat-mercari{background:#f1eafc;color:#5b2ea6;border:1px solid #c9b3ef;}
+.plat-ebay{background:#fff6d6;color:#8a5a00;border:1px solid #f0cf6b;}
+.plat-stockx{background:#e3f1fd;color:#0b5cad;border:1px solid #9cc8f2;}
+.plat-inperson{background:#e5f6e8;color:#1b6e2d;border:1px solid #a3d8ae;}
+.plat-tiktok{background:#fde8f1;color:#a0124f;border:1px solid #f1abc9;}
+.plat-cashout{background:#fff0dc;color:#a34200;border:1px solid #f3c28f;}
+.plat-whatnot{background:#f6e8fa;color:#7a1f94;border:1px solid #deb0ea;}
+.plat-locations{background:#dff6f8;color:#07666f;border:1px solid #93d6dc;}
+.plat-unsold{background:#eef1f8;color:#566079;border:1px solid #c9d1e2;}
+.plat-return{background:#fdecec;color:#b42323;border:1px solid #f2b1b1;}
+.plat-kept{background:#fff3d6;color:#8a5a00;border:1px solid #e8c36a;}
+.profit-pos{color:var(--green);font-family:var(--mono);font-size:13px;}
+.profit-neg{color:var(--red);font-family:var(--mono);font-size:13px;}
+.profit-zero{color:var(--text3);font-family:var(--mono);font-size:13px;}
+.warn-badge{background:#fff0e6;color:#a34a00;border:1px solid #f0bd94;padding:2px 6px;border-radius:3px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;}
+.note-cell{background:none;border:none;border-bottom:1px solid var(--border);outline:none;color:var(--text2);font-family:var(--sans);font-size:13px;width:120px;padding:2px 4px;}
 .note-cell::placeholder{color:var(--border2);}
-.loading-row td{text-align:center;padding:30px;color:var(--text3);font-family:var(--mono);font-size:11px;}
+.loading-row td{text-align:center;padding:30px;color:var(--text3);font-family:var(--mono);font-size:13px;}
 
 /* CONTENT */
 .content-page{padding:18px 20px;overflow-y:auto;max-height:calc(100vh - var(--tab-h));}
 .post-item{display:flex;align-items:center;gap:9px;padding:10px;background:var(--bg3);border:1px solid var(--border);border-radius:7px;margin-bottom:6px;}
-.post-platform{font-size:9px;color:var(--text3);text-transform:uppercase;background:var(--bg4);border:1px solid var(--border);padding:3px 7px;border-radius:3px;letter-spacing:.06em;min-width:58px;text-align:center;white-space:nowrap;}
-.post-topic{flex:1;font-size:12px;color:var(--text2);}
-.post-date{font-family:var(--mono);font-size:9px;color:var(--text3);white-space:nowrap;}
-.post-status{font-size:9px;padding:3px 7px;border-radius:3px;white-space:nowrap;}
+.post-platform{font-size:12px;color:var(--text3);text-transform:uppercase;background:var(--bg4);border:1px solid var(--border);padding:3px 7px;border-radius:3px;letter-spacing:.06em;min-width:58px;text-align:center;white-space:nowrap;}
+.post-topic{flex:1;font-size:14px;color:var(--text2);}
+.post-date{font-family:var(--mono);font-size:12px;color:var(--text3);white-space:nowrap;}
+.post-status{font-size:12px;padding:3px 7px;border-radius:3px;white-space:nowrap;}
 .ps-live{background:var(--green-bg);color:var(--green);border:1px solid var(--green-dim);}
-.done-tag{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:3px 9px;font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;}
+.done-tag{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:3px 9px;font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;}
 
 /* FINANCE */
 .finance-page{padding:18px 20px;overflow-y:auto;max-height:calc(100vh - var(--tab-h));}
-.fin-header{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:14px;font-family:var(--mono);}
+.fin-header{font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:14px;font-family:var(--mono);}
 .fin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
 .fin-card{background:var(--bg2);border:1px solid var(--border);border-radius:9px;padding:14px;}
-.fin-card-label{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:7px;}
+.fin-card-label{font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:7px;}
 .fin-card-amount{font-family:var(--mono);font-size:22px;font-weight:700;color:var(--gold);margin-bottom:3px;}
-.fin-card-sub{font-size:10px;color:var(--text3);}
+.fin-card-sub{font-size:12px;color:var(--text3);}
 .fin-card-bar{height:2px;background:var(--border);border-radius:1px;margin-top:9px;overflow:hidden;}
 .fin-card-fill{height:100%;background:var(--gold);border-radius:1px;}
 .fin-section{margin-bottom:18px;}
-.fin-section-title{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:9px;padding-bottom:5px;border-bottom:1px solid var(--border);}
+.fin-section-title{font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:9px;padding-bottom:5px;border-bottom:1px solid var(--border);}
 .fin-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);}
 .fin-row:last-child{border-bottom:none;}
-.fin-row-label{font-size:12px;color:var(--text2);}
-.fin-row-val{font-family:var(--mono);font-size:12px;font-weight:700;}
+.fin-row-label{font-size:14px;color:var(--text2);}
+.fin-row-val{font-family:var(--mono);font-size:14px;font-weight:700;}
 .fin-row-val.pos{color:var(--green);}
 .fin-row-val.neg{color:var(--red);}
 .fin-row-val.gold{color:var(--gold);}
 
 /* OPS */
-.ops-page{padding:16px 20px 40px;}
-.ops-date{font-family:var(--mono);font-size:10px;color:var(--text3);margin-left:12px;}
-.ops-msg{font-family:var(--mono);font-size:11px;color:var(--gold);margin:12px 0;min-height:14px;}
+.ops-page{padding:22px 26px 56px;max-width:1320px;margin:0 auto;}
+.ops-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:4px;}
+.ops-head h2{font-size:24px;font-weight:800;color:var(--text);}
+.ops-date{font-family:var(--mono);font-size:13px;color:var(--text3);}
+.ops-head-btns{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;}
+.ops-btn{background:var(--bg2);border:1px solid var(--border2);color:var(--text2);font-family:var(--sans);font-size:14px;font-weight:600;border-radius:8px;padding:9px 14px;cursor:pointer;}
+.ops-btn:hover{border-color:var(--gold);color:var(--gold);}
+.ops-btn.primary{background:var(--gold);border-color:var(--gold);color:#fff;}
+.ops-btn.primary:hover{filter:brightness(1.08);color:#fff;}
+.ops-btn.danger{color:var(--red);border-color:var(--red-dim);}
+.ops-btn.danger:hover{background:var(--red-bg);color:var(--red);border-color:var(--red);}
+.ops-btn:disabled{opacity:.5;cursor:default;}
+.ops-msg{font-size:14px;color:var(--gold);margin:10px 0;min-height:18px;font-weight:600;}
 .ops-msg.err{color:var(--red);}
-.ops-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;}
-.ops-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:14px 16px;}
-.ops-card .plabel{margin-bottom:10px;}
-.ops-count{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--gold);}
-.ops-row{border-top:1px solid var(--border);padding:9px 0;display:flex;gap:10px;align-items:flex-start;}
+.ops-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:14px 0;}
+.ops-split{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:14px;margin-bottom:14px;}
+.ops-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px 18px;box-shadow:0 1px 3px rgba(20,26,43,.06);margin-bottom:0;}
+.ops-card + .ops-card.stack{margin-top:14px;}
+.ops-card-title{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);margin-bottom:12px;}
+.ops-card-title .n{color:var(--gold);font-family:var(--mono);}
+.ops-count{margin-left:auto;font-family:var(--mono);font-size:14px;font-weight:700;color:var(--gold);}
+.ops-row{border-top:1px solid var(--border);padding:11px 0;display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
 .ops-row:first-child{border-top:none;}
-.ops-main{flex:1;min-width:0;}
-.ops-title{font-size:12px;font-weight:700;color:var(--text);overflow:hidden;text-overflow:ellipsis;}
-.ops-sub{font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:3px;line-height:1.5;}
-.ops-empty{font-size:11px;color:var(--text3);padding:6px 0;}
-.ops-tag{font-family:var(--mono);font-size:9px;border-radius:4px;padding:2px 6px;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;}
+.ops-main{flex:1;min-width:150px;cursor:pointer;}
+.ops-main:hover .ops-title{color:var(--gold);}
+.ops-title{font-size:15px;font-weight:700;color:var(--text);}
+.ops-sub{font-size:13px;color:var(--text3);margin-top:3px;line-height:1.5;}
+.ops-empty{font-size:14px;color:var(--text3);padding:6px 0;}
+.ops-tag{font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px;white-space:nowrap;}
 .ops-tag.red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-dim);}
-.ops-tag.gold{background:var(--gold-dark);color:var(--gold);border:1px solid var(--gold-dim);}
+.ops-tag.gold{background:#fff4d6;color:#8a5a00;border:1px solid #e8c36a;}
 .ops-tag.green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-dim);}
-.ops-act{background:var(--bg3);border:1px solid var(--border2);color:var(--text2);font-family:var(--sans);font-size:10px;border-radius:4px;padding:4px 8px;cursor:pointer;white-space:nowrap;}
-.ops-act:hover{color:var(--gold);border-color:var(--gold-dim);}
-.ops-forms{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
-.ops-form{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.ops-form .full{grid-column:1 / -1;}
-.ops-form label{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;display:block;margin-bottom:3px;}
-.ops-form input,.ops-form select{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:5px;color:var(--text);font-family:var(--sans);font-size:12px;padding:7px 9px;outline:none;}
-.ops-form input:focus,.ops-form select:focus{border-color:var(--gold-dim);}
-.ops-submit{grid-column:1 / -1;background:var(--gold);color:#000;border:none;border-radius:5px;font-family:var(--sans);font-weight:700;font-size:12px;padding:9px;cursor:pointer;}
-.ops-submit:disabled{opacity:.5;cursor:default;}
-@media(max-width:900px){.ops-grid,.ops-forms{grid-template-columns:1fr;}}
+.ops-tag.gray{background:var(--bg3);color:var(--text3);border:1px solid var(--border2);}
+.ops-act{background:var(--bg3);border:1px solid var(--border2);color:var(--text2);font-family:var(--sans);font-size:13px;font-weight:600;border-radius:7px;padding:6px 10px;cursor:pointer;white-space:nowrap;}
+.ops-act:hover{color:var(--gold);border-color:var(--gold);}
+/* calendar */
+.ops-cal-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.ops-cal-title{font-size:18px;font-weight:800;color:var(--text);flex:1;}
+.ops-cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;}
+.ops-ch{font-size:12px;font-weight:700;color:var(--text3);text-align:center;padding:4px 0;text-transform:uppercase;letter-spacing:.05em;}
+.ops-cd{min-height:84px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:5px 6px;cursor:pointer;overflow:hidden;}
+.ops-cd:hover{border-color:var(--gold);}
+.ops-cd.dim{opacity:.45;}
+.ops-cd.today{background:#eaf1ff;border-color:var(--gold);}
+.ops-cd.sel{box-shadow:0 0 0 2px var(--gold);}
+.ops-dn{font-size:13px;font-weight:700;color:var(--text2);display:block;margin-bottom:3px;}
+.ops-cd.today .ops-dn{color:var(--gold);}
+.ops-chip{font-size:12px;font-weight:700;border-radius:5px;padding:2px 5px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ops-chip.red{background:var(--red-bg);color:var(--red);}
+.ops-chip.gold{background:#fff4d6;color:#8a5a00;}
+.ops-chip.green{background:var(--green-bg);color:var(--green);}
+.ops-more{font-size:12px;color:var(--text3);margin-top:2px;}
+.ops-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:13px;color:var(--text3);}
+.ops-legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:middle;}
+/* forms */
+.ops-form{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;align-items:end;}
+.ops-form .wide{grid-column:span 2;}
+.ops-form label,.ops-fld label{font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:4px;}
+.ops-form input,.ops-form select,.ops-fld input,.ops-fld select,.ops-fld textarea{width:100%;background:var(--bg2);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-family:var(--sans);font-size:15px;padding:9px 11px;outline:none;}
+.ops-form input:focus,.ops-form select:focus,.ops-fld input:focus,.ops-fld select:focus,.ops-fld textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(37,99,235,.15);}
+/* modal */
+.ops-modal{position:fixed;inset:0;background:rgba(20,26,43,.55);z-index:500;display:none;align-items:flex-start;justify-content:center;padding:28px 16px;overflow:auto;}
+.ops-modal.open{display:flex;}
+.ops-panel{background:var(--bg2);border-radius:14px;width:100%;max-width:1020px;box-shadow:0 20px 60px rgba(20,26,43,.35);}
+.ops-panel.narrow{max-width:560px;}
+.ops-ph{display:flex;align-items:center;gap:10px;padding:16px 22px;border-bottom:1px solid var(--border);}
+.ops-ph h3{font-size:19px;font-weight:800;flex:1;color:var(--text);}
+.ops-x{background:none;border:none;font-size:26px;line-height:1;color:var(--text3);cursor:pointer;padding:0 4px;}
+.ops-x:hover{color:var(--red);}
+.ops-pb{padding:20px 22px;}
+.ops-pf{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:14px 22px;border-top:1px solid var(--border);background:var(--bg);border-radius:0 0 14px 14px;}
+.ops-pf .grow{flex:1;}
+.ops-two{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:22px;}
+.ops-img{background:var(--bg3);border:1px dashed var(--border2);border-radius:10px;min-height:260px;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:14px;text-align:center;padding:8px;overflow:hidden;}
+.ops-img img{max-width:100%;max-height:520px;border-radius:6px;display:block;cursor:zoom-in;}
+.ops-img.zoom img{max-height:none;cursor:zoom-out;}
+.ops-fields{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+.ops-fields .full{grid-column:1 / -1;}
+.ops-dl{font-size:14px;color:var(--text2);padding:9px 11px;background:var(--bg3);border-radius:8px;font-weight:700;}
+.ops-items{width:100%;border-collapse:collapse;margin-top:6px;}
+.ops-items th{font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;text-align:left;padding:6px 4px;}
+.ops-items td{padding:4px;vertical-align:middle;}
+.ops-items input{width:100%;background:var(--bg2);border:1px solid var(--border2);border-radius:7px;color:var(--text);font-family:var(--sans);font-size:15px;padding:8px 9px;outline:none;}
+.ops-items input:focus{border-color:var(--gold);}
+.ops-items input[type=number]{text-align:center;}
+.ops-items .mi-left{font-weight:800;text-align:center;font-size:16px;color:var(--text);min-width:44px;}
+.ops-items tr.bad .mi-left{color:var(--red);}
+.ops-items tr.bad input{border-color:var(--red);}
+.ops-sec{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);margin:20px 0 6px;display:flex;align-items:center;gap:10px;}
+.ops-sec .grow{flex:1;}
+.ops-store-row{display:grid;grid-template-columns:1fr 110px auto auto;gap:8px;align-items:center;margin-bottom:8px;}
+.ops-store-row input{width:100%;background:var(--bg2);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-family:var(--sans);font-size:15px;padding:9px 11px;outline:none;}
+@media(max-width:900px){.ops-grid,.ops-split,.ops-two{grid-template-columns:1fr;}.ops-form{grid-template-columns:1fr 1fr;}.ops-cd{min-height:62px;}.ops-page{padding:16px 12px 40px;}}
 </style>
 </head>
 <body>
@@ -296,11 +360,11 @@ html,body{height:100%;background:#060606;}
       </div>
       <div style="text-align:right;flex-shrink:0;">
         <div class="clock" id="clock-disp">--:--<sup>--</sup></div>
-        <div style="font-size:9px;color:var(--text3);letter-spacing:.1em;">LOCAL TIME</div>
+        <div style="font-size:12px;color:var(--text3);letter-spacing:.1em;">LOCAL TIME</div>
       </div>
     </div>
     <div class="capture-bar">
-      <span style="font-family:var(--mono);font-size:10px;color:var(--text3);">//</span>
+      <span style="font-family:var(--mono);font-size:12px;color:var(--text3);">//</span>
       <input type="text" id="cap-in" placeholder="Capture a thought, task, or idea..."/>
       <button class="cap-btn" onclick="captureNote()">CAPTURE</button>
     </div>
@@ -325,8 +389,8 @@ html,body{height:100%;background:#060606;}
       <div class="goal-item" style="background:var(--green-bg);border-color:var(--green-dim);">
         <div class="glabel" style="color:var(--green);">2026 Profit Goal</div>
         <div style="font-family:var(--mono);font-size:18px;color:var(--green);font-weight:700;" id="goal-progress-txt">$7,291 / $15,000</div>
-        <div class="pbar" style="background:#0f2a0f;"><div class="pfill" id="goal-bar" style="width:48.6%;background:var(--green);"></div></div>
-        <div style="font-size:9px;color:var(--green-dim);margin-top:3px;" id="goal-pct">48.6% to goal</div>
+        <div class="pbar" style="background:var(--bg4);"><div class="pfill" id="goal-bar" style="width:48.6%;background:var(--green);"></div></div>
+        <div style="font-size:12px;color:var(--green-dim);margin-top:3px;" id="goal-pct">48.6% to goal</div>
       </div>
       <div class="goal-item">
         <div class="glabel">Daily Sales Log</div>
@@ -389,7 +453,7 @@ html,body{height:100%;background:#060606;}
   <div class="panel" style="grid-column:2;grid-row:3;">
     <div class="plabel"><span class="n">04</span> // CALENDAR <span style="margin-left:auto;color:var(--text3);" id="cal-month"></span></div>
     <div class="cal-week" id="cal-week"></div>
-    <div style="font-size:9px;color:var(--text3);margin-bottom:7px;letter-spacing:.08em;">TODAY - 4 EVENTS</div>
+    <div style="font-size:12px;color:var(--text3);margin-bottom:7px;letter-spacing:.08em;">TODAY - 4 EVENTS</div>
     <div id="cal-events"></div>
   </div>
 
@@ -420,7 +484,7 @@ html,body{height:100%;background:#060606;}
     <button class="rtab" id="rf-return" onclick="setFilter('return')">Returned</button>
     <button class="rtab" id="rf-warn" onclick="setFilter('warn')">! Cant Return</button>
     <button class="r-btn" onclick="loadSheet()" style="margin-left:auto;">Refresh</button>
-    <span style="font-family:var(--mono);font-size:10px;color:var(--text3);" id="inv-count">--</span>
+    <span style="font-family:var(--mono);font-size:12px;color:var(--text3);" id="inv-count">--</span>
   </div>
   <div class="r-stats">
     <div class="rstat"><label>Total Profit</label><div class="rv pos" id="rs-total">$7,291.89</div><div class="rsub">all platforms</div></div>
@@ -467,54 +531,60 @@ html,body{height:100%;background:#060606;}
 
 <!-- ===== OPS ===== -->
 <div id="page-ops" class="page ops-page">
-  <div class="r-topbar">
+  <div class="ops-head">
     <h2>Ops Agenda</h2>
     <span class="ops-date" id="ops-date"></span>
-    <button class="r-btn" style="margin-left:auto;" onclick="loadOps()">Refresh</button>
-    <button class="r-btn" onclick="opsSetKey()">Passcode</button>
+    <div class="ops-head-btns">
+      <button class="ops-btn primary" onclick="opsOpenReceipt(null)">+ New receipt</button>
+      <button class="ops-btn" onclick="opsOpenStores()">Stores</button>
+      <button class="ops-btn" onclick="loadOps()">Refresh</button>
+      <button class="ops-btn" onclick="opsSetKey()">Passcode</button>
+    </div>
   </div>
   <div class="ops-msg" id="ops-msg"></div>
 
   <div class="ops-grid">
-    <div class="ops-card"><div class="plabel"><span class="n">01</span> Items to ship today <span class="ops-count" id="oc-ship">0</span></div><div id="ol-ship"></div></div>
-    <div class="ops-card"><div class="plabel"><span class="n">02</span> Packages arriving today <span class="ops-count" id="oc-arrive">0</span></div><div id="ol-arrive"></div></div>
-    <div class="ops-card"><div class="plabel"><span class="n">03</span> Urgent returns due <span class="ops-count" id="oc-return">0</span></div><div id="ol-return"></div></div>
+    <div class="ops-card"><div class="ops-card-title"><span class="n">01</span> Items to ship today <span class="ops-count" id="oc-ship">0</span></div><div id="ol-ship"></div></div>
+    <div class="ops-card"><div class="ops-card-title"><span class="n">02</span> Packages arriving today <span class="ops-count" id="oc-arrive">0</span></div><div id="ol-arrive"></div></div>
+    <div class="ops-card"><div class="ops-card-title"><span class="n">03</span> Urgent returns due <span class="ops-count" id="oc-return">0</span></div><div id="ol-return"></div></div>
   </div>
 
-  <div class="ops-forms">
+  <div class="ops-split">
     <div class="ops-card">
-      <div class="plabel"><span class="n">+</span> Add a purchase</div>
-      <div class="ops-form">
-        <div><label>Store</label><select id="op-store" onchange="opsStoreChange()"><option>Ross</option><option>Amazon</option><option>Other</option></select></div>
-        <div id="op-other-wrap" style="display:none;"><label>Store name</label><input id="op-other" type="text"/></div>
-        <div class="full"><label>Item</label><input id="op-item" type="text" placeholder="What did you buy"/></div>
-        <div><label>Order or receipt number</label><input id="op-order" type="text"/></div>
-        <div><label>Purchase date</label><input id="op-date" type="date"/></div>
-        <div><label>Return window (days)</label><input id="op-window" type="number" min="0" value="30"/></div>
-        <div><label>Carrier</label><select id="op-carrier"><option value="">None</option><option>USPS</option><option>UPS</option><option>FedEx</option><option>Amazon</option><option>Other</option></select></div>
-        <div><label>Tracking number</label><input id="op-track" type="text"/></div>
-        <div><label>Arrives on</label><input id="op-eta" type="date"/></div>
-        <div class="full"><label>Receipt photo</label><input id="op-photo" type="file" accept="image/*" capture="environment"/></div>
-        <button class="ops-submit" id="op-submit" onclick="opsAddPurchase()">Save purchase</button>
+      <div class="ops-cal-head">
+        <button class="ops-act" onclick="opsMonth(-1)">&larr;</button>
+        <div class="ops-cal-title" id="ops-cal-title"></div>
+        <button class="ops-act" onclick="opsMonth(0)">Today</button>
+        <button class="ops-act" onclick="opsMonth(1)">&rarr;</button>
       </div>
+      <div class="ops-cal" id="ops-cal"></div>
+      <div class="ops-legend"><span><i style="background:var(--red)"></i>Due within a day or expired</span><span><i style="background:#e8a900"></i>Due within 3 days</span><span><i style="background:var(--green)"></i>Plenty of time</span></div>
     </div>
     <div class="ops-card">
-      <div class="plabel"><span class="n">+</span> Add a sale to ship</div>
-      <div class="ops-form">
-        <div><label>Platform</label><select id="os-platform"><option>eBay</option><option>Mercari</option><option>TikTok Shop</option><option>Facebook</option><option>OfferUp</option></select></div>
-        <div><label>Ship by</label><input id="os-shipby" type="date"/></div>
-        <div class="full"><label>Item</label><input id="os-item" type="text"/></div>
-        <div><label>Carrier</label><select id="os-carrier"><option value="">None</option><option>USPS</option><option>UPS</option><option>FedEx</option></select></div>
-        <div><label>Tracking number</label><input id="os-track" type="text"/></div>
-        <button class="ops-submit" id="os-submit" onclick="opsAddShipment()">Save sale</button>
-      </div>
+      <div class="ops-card-title"><span id="ops-day-label">Selected day</span><span class="ops-count" id="oc-day">0</span></div>
+      <div id="ops-day-list"></div>
     </div>
   </div>
 
   <div class="ops-card">
-    <div class="plabel"><span class="n">04</span> All open returns <span class="ops-count" id="oc-open">0</span></div>
+    <div class="ops-card-title"><span class="n">04</span> <span id="ops-all-label">Open receipts</span> <span class="ops-count" id="oc-open">0</span>
+      <button class="ops-act" style="margin-left:10px;" onclick="opsToggleAll()" id="ops-all-btn">Show everything</button></div>
     <div id="ol-open"></div>
   </div>
+
+  <div class="ops-card stack">
+    <div class="ops-card-title"><span class="n">+</span> Add a sale to ship</div>
+    <div class="ops-form">
+      <div><label>Platform</label><select id="os-platform"><option>eBay</option><option>Mercari</option><option>TikTok Shop</option><option>Facebook</option><option>OfferUp</option></select></div>
+      <div class="wide"><label>Item</label><input id="os-item" type="text"/></div>
+      <div><label>Ship by</label><input id="os-shipby" type="date"/></div>
+      <div><label>Carrier</label><select id="os-carrier"><option value="">None</option><option>USPS</option><option>UPS</option><option>FedEx</option></select></div>
+      <div class="wide"><label>Tracking number</label><input id="os-track" type="text"/></div>
+      <div><button class="ops-btn primary" style="width:100%;" id="os-submit" onclick="opsAddShipment()">Save sale</button></div>
+    </div>
+  </div>
+
+  <div class="ops-modal" id="ops-modal" onclick="opsModalBg(event)"><div class="ops-panel" id="ops-panel"></div></div>
 </div>
 
 <!-- ===== CONTENT ===== -->
@@ -529,22 +599,22 @@ html,body{height:100%;background:#060606;}
   <div class="fin-section">
     <div class="fin-section-title">Log a Post - Did you upload today?</div>
     <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
-      <input type="text" id="ct-topic" placeholder="Topic e.g. Roth IRA vs 401k..." style="flex:2;min-width:160px;background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:7px 11px;font-family:var(--sans);font-size:12px;color:var(--text);outline:none;" onkeydown="if(event.key==='Enter')logPost()"/>
-      <select id="ct-platform" style="background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:7px 10px;font-family:var(--sans);font-size:11px;color:var(--text2);outline:none;">
+      <input type="text" id="ct-topic" placeholder="Topic e.g. Roth IRA vs 401k..." style="flex:2;min-width:160px;background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:7px 11px;font-family:var(--sans);font-size:14px;color:var(--text);outline:none;" onkeydown="if(event.key==='Enter')logPost()"/>
+      <select id="ct-platform" style="background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:7px 10px;font-family:var(--sans);font-size:13px;color:var(--text2);outline:none;">
         <option>Instagram</option><option>TikTok</option><option>Both</option>
       </select>
-      <select id="ct-type" style="background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:7px 10px;font-family:var(--sans);font-size:11px;color:var(--text2);outline:none;">
+      <select id="ct-type" style="background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:7px 10px;font-family:var(--sans);font-size:13px;color:var(--text2);outline:none;">
         <option>Carousel</option><option>Reel</option><option>Story</option>
       </select>
-      <button onclick="logPost()" style="background:var(--gold);border:none;color:#000;font-family:var(--sans);font-size:11px;font-weight:700;padding:7px 16px;border-radius:5px;cursor:pointer;">+ Log</button>
+      <button onclick="logPost()" style="background:var(--gold);border:none;color:#fff;font-family:var(--sans);font-size:13px;font-weight:700;padding:7px 16px;border-radius:5px;cursor:pointer;">+ Log</button>
     </div>
     <div id="ct-posts-list"><div class="no-meals">No posts logged yet. Start tracking above.</div></div>
   </div>
   <div class="fin-section">
     <div class="fin-section-title">Upcoming Ideas</div>
     <div style="display:flex;gap:8px;margin-bottom:8px;">
-      <input type="text" id="ct-idea-in" placeholder="New content idea..." style="flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:7px 11px;font-family:var(--sans);font-size:12px;color:var(--text);outline:none;" onkeydown="if(event.key==='Enter')addIdea()"/>
-      <button onclick="addIdea()" style="background:var(--bg3);border:1px solid var(--border2);color:var(--gold);font-family:var(--mono);font-size:11px;padding:7px 14px;border-radius:5px;cursor:pointer;font-weight:700;">+</button>
+      <input type="text" id="ct-idea-in" placeholder="New content idea..." style="flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:7px 11px;font-family:var(--sans);font-size:14px;color:var(--text);outline:none;" onkeydown="if(event.key==='Enter')addIdea()"/>
+      <button onclick="addIdea()" style="background:var(--bg3);border:1px solid var(--border2);color:var(--gold);font-family:var(--mono);font-size:13px;padding:7px 14px;border-radius:5px;cursor:pointer;font-weight:700;">+</button>
     </div>
     <div id="ct-ideas-list"></div>
   </div>
@@ -570,7 +640,7 @@ html,body{height:100%;background:#060606;}
     <div class="fin-row"><span class="fin-row-label">Total Gross Profit (all platforms)</span><span class="fin-row-val pos" id="fin-gross">+$7,291.89</span></div>
     <div class="fin-row"><span class="fin-row-label">Business Expenses</span><span class="fin-row-val neg">-$414.78</span></div>
     <div class="fin-row"><span class="fin-row-label">Subscriptions</span><span class="fin-row-val neg">-$245.31</span></div>
-    <div class="fin-row" style="border-top:1px solid var(--gold-dark);padding-top:9px;margin-top:3px;"><span class="fin-row-label" style="color:var(--text);font-weight:700;">Net Take-Home 2026</span><span class="fin-row-val gold" style="font-size:15px;">+$6,631.80</span></div>
+    <div class="fin-row" style="border-top:1px solid var(--gold-dark);padding-top:9px;margin-top:3px;"><span class="fin-row-label" style="color:var(--text);font-weight:700;">Net Take-Home 2026</span><span class="fin-row-val gold" style="font-size:16px;">+$6,631.80</span></div>
   </div>
   <div class="fin-section">
     <div class="fin-section-title">Top Earners</div>
@@ -801,7 +871,7 @@ function renderTable() {
       +'<td class="profit-zero">'+(r.soldAmt?'$'+r.soldAmt.toFixed(2):'--')+'</td>'
       +'<td class="'+profClass+'">'+ps+'$'+r.profit.toFixed(2)+'</td>'
       +'<td><span class="pill-s '+pc+'">'+sl+'</span></td>'
-      +'<td style="font-family:var(--mono);font-size:10px;color:var(--text3);">'+(r.dateSold?r.dateSold.split('T')[0]:'--')+'</td>'
+      +'<td style="font-family:var(--mono);font-size:12px;color:var(--text3);">'+(r.dateSold?r.dateSold.split('T')[0]:'--')+'</td>'
       +'<td><span class="pill-s '+pc+'">'+sl+'</span></td>'
       +'<td>'+(r.warn?'<span class="warn-badge">! '+r.warn+'</span>':'')
       +'<input class="note-cell" placeholder="Note..." value="'+noteVal+'" oninput="notes['+idx+']=this.value"/></td>'
@@ -988,7 +1058,7 @@ function addIdea(){
 function renderCtIdeas(){
   var el=document.getElementById('ct-ideas-list'); if(!el)return;
   el.innerHTML=ctIdeas.map(function(idea,i){
-    return '<div class="fin-row"><span class="fin-row-label">'+idea+'</span><button onclick="ctIdeas.splice('+i+',1);renderCtIdeas();" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;padding:0 4px;">x</button></div>';
+    return '<div class="fin-row"><span class="fin-row-label">'+idea+'</span><button onclick="ctIdeas.splice('+i+',1);renderCtIdeas();" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:15px;padding:0 4px;">x</button></div>';
   }).join('');
 }
 function renderDoneTopics(){
@@ -1004,10 +1074,12 @@ buildHabits();
 updateHabitScore();
 buildTasks();
 // ===== OPS =====
-var OPS = { data: null, windows: { Ross: 30, Amazon: 30 } };
+var OPS = { data: null, month: null, selected: null, showAll: false, editing: null, photo: null };
+var OPS_FALLBACK_STORES = [{ name: 'Ross', return_window_days: 30 }, { name: 'Amazon', return_window_days: 30 }];
 
 function opsToday() { var d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 10); }
 function opsDays(from, to) { return Math.round((Date.parse(to) - Date.parse(from)) / 86400000); }
+function opsAddDays(iso, n) { var d = new Date(iso + 'T00:00:00Z'); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); }
 function opsEsc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
 function opsMsg(t, err) { var m = document.getElementById('ops-msg'); m.textContent = t || ''; m.className = 'ops-msg' + (err ? ' err' : ''); }
 function opsKey() { try { return localStorage.getItem('ops_key') || ''; } catch (e) { return ''; } }
@@ -1017,6 +1089,7 @@ function opsSetKey() {
   try { localStorage.setItem('ops_key', k.trim()); } catch (e) {}
   loadOps();
 }
+function opsPretty(iso) { return new Date(iso + 'T00:00:00Z').toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' }); }
 
 async function opsCall(method, body) {
   var res = await fetch('/api/ops', {
@@ -1029,6 +1102,31 @@ async function opsCall(method, body) {
   return data;
 }
 
+// ----- helpers for receipts -----
+function opsStores() { var s = (OPS.data && OPS.data.stores) || []; return s.length ? s : OPS_FALLBACK_STORES; }
+function opsItems(p) { return p.purchase_items || []; }
+function opsUnits(p) {
+  var items = opsItems(p), total = 0, left = 0;
+  if (!items.length) return { total: 1, left: p.status === 'open' ? 1 : 0 };
+  items.forEach(function (i) { total += i.qty; left += Math.max(0, i.qty - i.qty_returned - i.qty_sold); });
+  return { total: total, left: left };
+}
+function opsActive(p) { return p.status === 'open' && opsUnits(p).left > 0; }
+function opsTitle(p) {
+  var it = opsItems(p);
+  var first = it.length ? it[0].name : (p.item || 'Receipt');
+  return it.length > 1 ? first + ' +' + (it.length - 1) + ' more' : first;
+}
+function opsFind(id) { return ((OPS.data && OPS.data.purchases) || []).filter(function (p) { return p.id === id; })[0]; }
+function opsLeftText(d) {
+  if (d < 0) return 'Expired';
+  if (d === 0) return 'Due today';
+  if (d === 1) return 'Due tomorrow';
+  return d + ' days left';
+}
+function opsLeftClass(d) { return d <= 1 ? 'red' : d <= 3 ? 'gold' : 'green'; }
+
+// ----- loading -----
 async function loadOps() {
   document.getElementById('ops-date').textContent = new Date().toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
   if (!opsKey()) { opsMsg('Tap Passcode to unlock the Ops tab.'); renderOps(); return; }
@@ -1040,76 +1138,128 @@ async function loadOps() {
       return;
     }
     OPS.data = data;
-    opsMsg('');
+    if (!OPS.month) { var t = opsToday(); OPS.month = t.slice(0, 7) + '-01'; OPS.selected = t; }
+    opsMsg(data.needsUpgrade ? 'One more step: run supabase-ops-upgrade.sql in Supabase to turn on multi item receipts and stores.' : '');
     renderOps();
   } catch (e) {
     opsMsg(e.message, true);
   }
 }
 
-function opsRow(title, sub, tag, tagClass, actions) {
+// ----- rendering -----
+function opsRow(title, sub, tag, tagClass, actions, openId) {
   var btns = actions.map(function (a) { return '<button class="ops-act" onclick="' + a[1] + '">' + a[0] + '</button>'; }).join('');
-  return '<div class="ops-row"><div class="ops-main"><div class="ops-title">' + opsEsc(title) + '</div><div class="ops-sub">' + sub + '</div></div>' +
+  var click = openId ? ' onclick="opsOpenReceipt(\'' + openId + '\')"' : '';
+  return '<div class="ops-row"><div class="ops-main"' + click + '><div class="ops-title">' + opsEsc(title) + '</div><div class="ops-sub">' + sub + '</div></div>' +
     (tag ? '<span class="ops-tag ' + tagClass + '">' + tag + '</span>' : '') + btns + '</div>';
 }
-
 function opsFill(id, countId, rows, emptyText) {
   document.getElementById(id).innerHTML = rows.length ? rows.join('') : '<div class="ops-empty">' + emptyText + '</div>';
-  document.getElementById(countId).textContent = rows.length;
+  if (countId) document.getElementById(countId).textContent = rows.length;
+}
+function opsReceiptRow(p, today, quick) {
+  var left = opsDays(today, p.return_deadline), u = opsUnits(p);
+  var sub = opsEsc(p.store) + ' / ' + u.left + ' of ' + u.total + ' still in hand / deadline ' + opsEsc(p.return_deadline) + (p.order_number ? ' / #' + opsEsc(p.order_number) : '');
+  var acts = [['Open', "opsOpenReceipt('" + p.id + "')"]];
+  if (quick && opsActive(p)) {
+    acts.push(['Returned all', "opsReturnAll('" + p.id + "')"]);
+    acts.push(['Keeping', "opsUpdate('purchases','" + p.id + "',{status:'kept'})"]);
+  }
+  var tag = opsActive(p) ? opsLeftText(left) : (p.status === 'kept' ? 'Kept' : 'Done');
+  var cls = opsActive(p) ? opsLeftClass(left) : 'gray';
+  return opsRow(opsTitle(p), sub, tag, cls, acts, p.id);
 }
 
 function renderOps() {
   var d = OPS.data || { purchases: [], shipments: [] };
   var today = opsToday();
 
-  // 01 Ship today: unshipped sales due today or already late
   var ship = d.shipments.filter(function (x) { return x.status === 'to_ship' && x.ship_by <= today; }).map(function (x) {
     var late = opsDays(x.ship_by, today);
     var sub = opsEsc(x.platform) + (x.tracking_number ? ' / ' + opsEsc(x.carrier || '') + ' ' + opsEsc(x.tracking_number) : '');
-    return opsRow(x.item, sub, late > 0 ? late + 'd late' : 'Today', late > 0 ? 'red' : 'gold', [['Shipped', "opsUpdate('shipments','" + x.id + "',{status:'shipped'})"]]);
+    return opsRow(x.item, sub, late > 0 ? late + 'd late' : 'Today', late > 0 ? 'red' : 'gold', [['Shipped', "opsUpdate('shipments','" + x.id + "',{status:'shipped'})"]], null);
   });
   opsFill('ol-ship', 'oc-ship', ship, 'Nothing to ship today.');
 
-  // 02 Arriving today: inbound packages expected today, not marked delivered
   var arrive = d.purchases.filter(function (x) { return !x.delivered && x.expected_delivery === today && x.status === 'open'; }).map(function (x) {
     var sub = opsEsc(x.store) + (x.tracking_number ? ' / ' + opsEsc(x.carrier || '') + ' ' + opsEsc(x.tracking_number) : '');
-    return opsRow(x.item, sub, 'Today', 'green', [['Got it', "opsUpdate('purchases','" + x.id + "',{delivered:true})"]]);
+    return opsRow(opsTitle(x), sub, 'Today', 'green', [['Got it', "opsUpdate('purchases','" + x.id + "',{delivered:true})"]], x.id);
   });
   opsFill('ol-arrive', 'oc-arrive', arrive, 'No packages due today.');
 
-  // 03 Urgent returns: open items whose deadline is within 3 days (or passed)
-  var open = d.purchases.filter(function (x) { return x.status === 'open'; });
-  var urgent = open.filter(function (x) { return opsDays(today, x.return_deadline) <= 3; }).map(function (x) { return opsReturnRow(x, today); });
+  var active = d.purchases.filter(opsActive);
+  var urgent = active.filter(function (x) { return opsDays(today, x.return_deadline) <= 3; }).map(function (x) { return opsReceiptRow(x, today, true); });
   opsFill('ol-return', 'oc-return', urgent, 'No returns due in the next 3 days.');
 
-  // 04 All open returns
-  var all = open.map(function (x) { return opsReturnRow(x, today); });
-  opsFill('ol-open', 'oc-open', all, 'No open purchases yet.');
+  var list = (OPS.showAll ? d.purchases.slice() : active).sort(function (a, b) {
+    var aa = opsActive(a) ? 0 : 1, bb = opsActive(b) ? 0 : 1;
+    return aa - bb || (a.return_deadline < b.return_deadline ? -1 : 1);
+  }).map(function (x) { return opsReceiptRow(x, today, true); });
+  opsFill('ol-open', 'oc-open', list, 'No open receipts yet. Tap New receipt to add one.');
+  document.getElementById('ops-all-label').textContent = OPS.showAll ? 'All receipts' : 'Open receipts';
+  document.getElementById('ops-all-btn').textContent = OPS.showAll ? 'Show open only' : 'Show everything';
+
+  renderOpsCal();
+  renderOpsDay();
 }
 
-function opsReturnRow(x, today) {
-  var left = opsDays(today, x.return_deadline);
-  var tag = left < 0 ? 'Expired' : left === 0 ? 'Due today' : left === 1 ? 'Due tomorrow' : left + ' days left';
-  var cls = left <= 1 ? 'red' : left <= 3 ? 'gold' : 'green';
-  var sub = opsEsc(x.store) + ' / bought ' + opsEsc(x.purchase_date) + ' / deadline ' + opsEsc(x.return_deadline) + (x.order_number ? ' / #' + opsEsc(x.order_number) : '') +
-    (x.receipt_url ? ' / <a href="' + opsEsc(x.receipt_url) + '" target="_blank" rel="noopener" style="color:var(--gold);">receipt</a>' : '');
-  return opsRow(x.item, sub, tag, cls, [
-    ['Returned', "opsUpdate('purchases','" + x.id + "',{status:'returned'})"],
-    ['Keeping', "opsUpdate('purchases','" + x.id + "',{status:'kept'})"]
-  ]);
+function opsToggleAll() { OPS.showAll = !OPS.showAll; renderOps(); }
+
+function opsMonth(delta) {
+  if (delta === 0) { var t = opsToday(); OPS.month = t.slice(0, 7) + '-01'; OPS.selected = t; }
+  else {
+    var d = new Date(OPS.month + 'T00:00:00Z');
+    d.setUTCMonth(d.getUTCMonth() + delta, 1);
+    OPS.month = d.toISOString().slice(0, 10);
+  }
+  renderOpsCal(); renderOpsDay();
+}
+function opsPickDay(iso) { OPS.selected = iso; renderOpsCal(); renderOpsDay(); }
+
+function renderOpsCal() {
+  var d = OPS.data || { purchases: [] };
+  var today = opsToday();
+  var first = OPS.month || (today.slice(0, 7) + '-01');
+  var dt = new Date(first + 'T00:00:00Z');
+  document.getElementById('ops-cal-title').textContent = dt.toLocaleDateString(undefined, { month: 'long', year: 'numeric', timeZone: 'UTC' });
+  var map = {};
+  d.purchases.filter(opsActive).forEach(function (p) { (map[p.return_deadline] = map[p.return_deadline] || []).push(p); });
+  var html = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(function (h) { return '<div class="ops-ch">' + h + '</div>'; }).join('');
+  var startDow = dt.getUTCDay();
+  for (var i = 0; i < 42; i++) {
+    var day = opsAddDays(first, i - startDow);
+    var inMonth = day.slice(0, 7) === first.slice(0, 7);
+    var list = map[day] || [];
+    var left = opsDays(today, day);
+    var cls = 'ops-cd' + (inMonth ? '' : ' dim') + (day === today ? ' today' : '') + (day === OPS.selected ? ' sel' : '');
+    var chips = list.slice(0, 2).map(function (p) { return '<div class="ops-chip ' + opsLeftClass(left) + '">' + opsEsc(p.store) + '</div>'; }).join('');
+    var more = list.length > 2 ? '<div class="ops-more">+' + (list.length - 2) + ' more</div>' : '';
+    html += '<div class="' + cls + '" onclick="opsPickDay(\'' + day + '\')"><span class="ops-dn">' + parseInt(day.slice(8), 10) + '</span>' + chips + more + '</div>';
+  }
+  document.getElementById('ops-cal').innerHTML = html;
 }
 
+function renderOpsDay() {
+  var d = OPS.data || { purchases: [] };
+  var today = opsToday();
+  var sel = OPS.selected || today;
+  var rows = d.purchases.filter(function (p) { return opsActive(p) && p.return_deadline === sel; }).map(function (p) { return opsReceiptRow(p, today, true); });
+  document.getElementById('ops-day-label').textContent = 'Returns due ' + opsPretty(sel);
+  opsFill('ops-day-list', 'oc-day', rows, 'Nothing due this day.');
+}
+
+// ----- quick actions -----
 async function opsUpdate(table, id, patch) {
   try { await opsCall('POST', { action: 'update', table: table, id: id, patch: patch }); await loadOps(); }
   catch (e) { opsMsg(e.message, true); }
 }
-
-function opsStoreChange() {
-  var v = document.getElementById('op-store').value;
-  document.getElementById('op-other-wrap').style.display = v === 'Other' ? 'block' : 'none';
-  if (OPS.windows[v]) document.getElementById('op-window').value = OPS.windows[v];
+async function opsReturnAll(id) {
+  if (!confirm('Mark everything still in hand on this receipt as returned?')) return;
+  try { await opsCall('POST', { action: 'return_all', id: id }); await loadOps(); }
+  catch (e) { opsMsg(e.message, true); }
 }
 
+// ----- photo -----
 function opsReadPhoto(file, cb) {
   var r = new FileReader();
   r.onload = function () {
@@ -1126,33 +1276,210 @@ function opsReadPhoto(file, cb) {
   r.readAsDataURL(file);
 }
 
-function opsAddPurchase() {
-  var store = document.getElementById('op-store').value;
-  if (store === 'Other') store = document.getElementById('op-other').value.trim();
-  var item = document.getElementById('op-item').value.trim();
-  if (!store || !item) { opsMsg('Add a store and an item first.', true); return; }
-  var purchase = {
-    store: store, item: item,
-    order_number: document.getElementById('op-order').value.trim(),
-    purchase_date: document.getElementById('op-date').value || opsToday(),
-    return_window_days: parseInt(document.getElementById('op-window').value, 10) || 30,
-    carrier: document.getElementById('op-carrier').value,
-    tracking_number: document.getElementById('op-track').value.trim(),
-    expected_delivery: document.getElementById('op-eta').value
-  };
-  var btn = document.getElementById('op-submit');
-  var file = document.getElementById('op-photo').files[0];
-  btn.disabled = true; btn.textContent = 'Saving...';
-  function send(receipt) {
-    opsCall('POST', { action: 'add_purchase', purchase: purchase, receipt: receipt || null }).then(function () {
-      ['op-item', 'op-order', 'op-track', 'op-eta', 'op-photo'].forEach(function (id) { document.getElementById(id).value = ''; });
-      opsMsg('Purchase saved.');
-      return loadOps();
-    }).catch(function (e) { opsMsg(e.message, true); }).then(function () { btn.disabled = false; btn.textContent = 'Save purchase'; });
-  }
-  if (file) opsReadPhoto(file, send); else send(null);
+// ----- receipt popup -----
+function opsModalBg(e) { if (e.target && e.target.id === 'ops-modal') opsCloseModal(); }
+function opsCloseModal() { document.getElementById('ops-modal').classList.remove('open'); OPS.editing = null; OPS.photo = null; }
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape') opsCloseModal(); });
+function opsShowModal(html, narrow) {
+  var panel = document.getElementById('ops-panel');
+  panel.className = 'ops-panel' + (narrow ? ' narrow' : '');
+  panel.innerHTML = html;
+  document.getElementById('ops-modal').classList.add('open');
+}
+function opsVal(id) { return document.getElementById(id).value; }
+
+function opsItemRow(it) {
+  it = it || { name: '', qty: 1, unit_cost: '', qty_returned: 0, qty_sold: 0 };
+  var left = Math.max(0, (it.qty || 0) - (it.qty_returned || 0) - (it.qty_sold || 0));
+  return '<tr data-id="' + opsEsc(it.id || '') + '">' +
+    '<td><input class="mi-name" type="text" placeholder="Item name" value="' + opsEsc(it.name) + '" oninput="opsRecalc()"/></td>' +
+    '<td style="width:74px;"><input class="mi-qty" type="number" min="0" value="' + (it.qty == null ? 1 : it.qty) + '" oninput="opsRecalc()"/></td>' +
+    '<td style="width:92px;"><input class="mi-cost" type="number" min="0" step="0.01" placeholder="0.00" value="' + (it.unit_cost == null ? '' : it.unit_cost) + '"/></td>' +
+    '<td style="width:84px;"><input class="mi-ret" type="number" min="0" value="' + (it.qty_returned || 0) + '" oninput="opsRecalc()"/></td>' +
+    '<td style="width:74px;"><input class="mi-sold" type="number" min="0" value="' + (it.qty_sold || 0) + '" oninput="opsRecalc()"/></td>' +
+    '<td class="mi-left">' + left + '</td>' +
+    '<td style="width:34px;"><button class="ops-x" title="Remove item" onclick="opsRemoveItem(this)">&times;</button></td></tr>';
+}
+function opsRecalc() {
+  document.querySelectorAll('#m-items tr').forEach(function (tr) {
+    var q = parseInt(tr.querySelector('.mi-qty').value, 10) || 0;
+    var r = parseInt(tr.querySelector('.mi-ret').value, 10) || 0;
+    var s = parseInt(tr.querySelector('.mi-sold').value, 10) || 0;
+    var left = q - r - s;
+    tr.querySelector('.mi-left').textContent = left;
+    tr.className = left < 0 ? 'bad' : '';
+  });
+}
+function opsAddItem() { document.getElementById('m-items').insertAdjacentHTML('beforeend', opsItemRow(null)); }
+function opsRemoveItem(btn) { var tr = btn.closest('tr'); tr.parentNode.removeChild(tr); }
+function opsFillReturns() {
+  document.querySelectorAll('#m-items tr').forEach(function (tr) {
+    var q = parseInt(tr.querySelector('.mi-qty').value, 10) || 0;
+    var s = parseInt(tr.querySelector('.mi-sold').value, 10) || 0;
+    tr.querySelector('.mi-ret').value = Math.max(0, q - s);
+  });
+  opsRecalc();
+}
+function opsStoreChange() {
+  var name = opsVal('m-store');
+  var s = opsStores().filter(function (x) { return x.name === name; })[0];
+  if (s) document.getElementById('m-window').value = s.return_window_days;
+  opsDeadlinePreview();
+}
+function opsDeadlinePreview() {
+  var d = opsVal('m-date'), w = parseInt(opsVal('m-window'), 10);
+  document.getElementById('m-deadline').textContent = d && !isNaN(w) ? opsPretty(opsAddDays(d, w)) : 'Pick a purchase date';
+}
+function opsPickPhoto() {
+  var f = document.getElementById('m-photo').files[0];
+  if (!f) return;
+  opsReadPhoto(f, function (data) {
+    OPS.photo = data;
+    var box = document.getElementById('m-img');
+    box.className = 'ops-img';
+    box.innerHTML = '<img src="' + data + '" onclick="opsZoom()" alt="Receipt preview"/>';
+  });
+}
+function opsZoom() { document.getElementById('m-img').classList.toggle('zoom'); }
+
+function opsOpenReceipt(id) {
+  var p = id ? opsFind(id) : null;
+  if (id && !p) return;
+  OPS.editing = id || null; OPS.photo = null;
+  var stores = opsStores().slice();
+  var store = p ? p.store : stores[0].name;
+  if (!stores.some(function (s) { return s.name === store; })) stores.push({ name: store, return_window_days: p ? p.return_window_days : 30 });
+  var opts = stores.map(function (s) { return '<option' + (s.name === store ? ' selected' : '') + '>' + opsEsc(s.name) + '</option>'; }).join('');
+  var win = p ? p.return_window_days : stores[0].return_window_days;
+  var carriers = ['', 'USPS', 'UPS', 'FedEx', 'Amazon', 'Other'].map(function (c) { return '<option value="' + c + '"' + (p && p.carrier === c ? ' selected' : '') + '>' + (c || 'None') + '</option>'; }).join('');
+  var items = p ? opsItems(p) : [];
+  if (p && !items.length) items = [{ name: p.item || '', qty: 1, qty_returned: p.status === 'returned' ? 1 : 0, qty_sold: 0 }];
+  if (!items.length) items = [null];
+  var img = p && p.receipt_url
+    ? '<img src="' + opsEsc(p.receipt_url) + '" onclick="opsZoom()" alt="Receipt"/>'
+    : 'No receipt photo yet.<br>Add one below.';
+  var html =
+    '<div class="ops-ph"><h3>' + (p ? 'Receipt: ' + opsEsc(opsTitle(p)) : 'New receipt') + '</h3><button class="ops-x" onclick="opsCloseModal()">&times;</button></div>' +
+    '<div class="ops-pb"><div class="ops-two">' +
+      '<div><div class="ops-img" id="m-img">' + img + '</div>' +
+        '<div class="ops-fld" style="margin-top:10px;"><label>' + (p && p.receipt_url ? 'Replace photo' : 'Receipt photo') + '</label><input id="m-photo" type="file" accept="image/*" onchange="opsPickPhoto()"/></div></div>' +
+      '<div><div class="ops-fields">' +
+        '<div class="ops-fld"><label>Store</label><select id="m-store" onchange="opsStoreChange()">' + opts + '</select></div>' +
+        '<div class="ops-fld"><label>Order or receipt number</label><input id="m-order" type="text" value="' + opsEsc(p ? p.order_number : '') + '"/></div>' +
+        '<div class="ops-fld"><label>Purchase date</label><input id="m-date" type="date" value="' + opsEsc(p ? p.purchase_date : opsToday()) + '" oninput="opsDeadlinePreview()"/></div>' +
+        '<div class="ops-fld"><label>Return window (days)</label><input id="m-window" type="number" min="0" value="' + win + '" oninput="opsDeadlinePreview()"/></div>' +
+        '<div class="ops-fld full"><label>Return deadline</label><div class="ops-dl" id="m-deadline"></div></div>' +
+        '<div class="ops-fld"><label>Carrier</label><select id="m-carrier">' + carriers + '</select></div>' +
+        '<div class="ops-fld"><label>Tracking number</label><input id="m-track" type="text" value="' + opsEsc(p ? p.tracking_number : '') + '"/></div>' +
+        '<div class="ops-fld"><label>Arrives on</label><input id="m-eta" type="date" value="' + opsEsc(p ? p.expected_delivery : '') + '"/></div>' +
+        '<div class="ops-fld"><label>Delivered</label><select id="m-delivered"><option value="no"' + (p && p.delivered ? '' : ' selected') + '>Not yet</option><option value="yes"' + (p && p.delivered ? ' selected' : '') + '>Yes</option></select></div>' +
+        '<div class="ops-fld full"><label>Notes</label><input id="m-notes" type="text" value="' + opsEsc(p ? p.notes : '') + '"/></div>' +
+      '</div></div>' +
+    '</div>' +
+    '<div class="ops-sec"><span>Items on this receipt</span><span class="grow"></span>' + (p ? '<button class="ops-act" onclick="opsFillReturns()">Return everything not sold</button>' : '') + '<button class="ops-act" onclick="opsAddItem()">+ Add item</button></div>' +
+    '<table class="ops-items"><thead><tr><th>Item</th><th>Bought</th><th>Cost each</th><th>Returned</th><th>Sold</th><th>Left</th><th></th></tr></thead><tbody id="m-items">' + items.map(opsItemRow).join('') + '</tbody></table>' +
+    '</div>' +
+    '<div class="ops-pf">' + (p ? '<button class="ops-btn danger" onclick="opsDeleteReceipt()">Delete receipt</button>' : '') + '<span class="grow"></span><button class="ops-btn" onclick="opsCloseModal()">Cancel</button><button class="ops-btn primary" id="m-save" onclick="opsSaveReceipt()">' + (p ? 'Save changes' : 'Save receipt') + '</button></div>';
+  opsShowModal(html, false);
+  opsDeadlinePreview();
+  opsRecalc();
 }
 
+function opsCollect() {
+  var items = [];
+  document.querySelectorAll('#m-items tr').forEach(function (tr) {
+    var name = tr.querySelector('.mi-name').value.trim();
+    if (!name) return;
+    items.push({
+      id: tr.getAttribute('data-id') || undefined,
+      name: name,
+      qty: parseInt(tr.querySelector('.mi-qty').value, 10) || 0,
+      unit_cost: tr.querySelector('.mi-cost').value,
+      qty_returned: parseInt(tr.querySelector('.mi-ret').value, 10) || 0,
+      qty_sold: parseInt(tr.querySelector('.mi-sold').value, 10) || 0
+    });
+  });
+  return items;
+}
+
+async function opsSaveReceipt() {
+  var items = opsCollect();
+  if (!items.length) { alert('Add at least one item with a name.'); return; }
+  for (var i = 0; i < items.length; i++) {
+    if (items[i].qty_returned + items[i].qty_sold > items[i].qty) {
+      alert('On "' + items[i].name + '", returned plus sold is more than the number bought.'); return;
+    }
+  }
+  var purchase = {
+    store: opsVal('m-store'), order_number: opsVal('m-order'), purchase_date: opsVal('m-date') || opsToday(),
+    return_window_days: parseInt(opsVal('m-window'), 10) || 0, carrier: opsVal('m-carrier'),
+    tracking_number: opsVal('m-track'), expected_delivery: opsVal('m-eta'), notes: opsVal('m-notes'),
+    delivered: opsVal('m-delivered') === 'yes'
+  };
+  var btn = document.getElementById('m-save');
+  btn.disabled = true; btn.textContent = 'Saving...';
+  try {
+    var body = OPS.editing
+      ? { action: 'save_purchase', id: OPS.editing, purchase: purchase, items: items, receipt: OPS.photo }
+      : { action: 'add_purchase', purchase: purchase, items: items, receipt: OPS.photo };
+    var out = await opsCall('POST', body);
+    var dl = out.purchase && out.purchase.return_deadline;
+    if (dl) { OPS.month = dl.slice(0, 7) + '-01'; OPS.selected = dl; }
+    opsCloseModal();
+    opsMsg('Receipt saved.');
+    await loadOps();
+  } catch (e) {
+    btn.disabled = false; btn.textContent = OPS.editing ? 'Save changes' : 'Save receipt';
+    alert(e.message);
+  }
+}
+
+async function opsDeleteReceipt() {
+  if (!OPS.editing) return;
+  if (!confirm('Delete this whole receipt and all its items? This cannot be undone.')) return;
+  try {
+    await opsCall('POST', { action: 'delete_purchase', id: OPS.editing });
+    opsCloseModal();
+    await loadOps();
+  } catch (e) { alert(e.message); }
+}
+
+// ----- stores popup -----
+function opsStoreRow(s) {
+  s = s || { id: '', name: '', return_window_days: 30 };
+  return '<div class="ops-store-row" data-id="' + opsEsc(s.id) + '">' +
+    '<input class="ms-name" type="text" placeholder="Store name" value="' + opsEsc(s.name) + '"/>' +
+    '<input class="ms-days" type="number" min="0" value="' + s.return_window_days + '"/>' +
+    '<button class="ops-act" onclick="opsSaveStore(this)">Save</button>' +
+    (s.id ? '<button class="ops-act" onclick="opsDeleteStore(\'' + s.id + '\')">Delete</button>' : '<span></span>') + '</div>';
+}
+function opsOpenStores() {
+  var stores = (OPS.data && OPS.data.stores) || [];
+  var note = OPS.data && OPS.data.needsUpgrade ? '<div class="ops-empty" style="color:var(--red);">Run supabase-ops-upgrade.sql in Supabase first, then stores can be edited here.</div>' : '';
+  var html = '<div class="ops-ph"><h3>Stores and return windows</h3><button class="ops-x" onclick="opsCloseModal()">&times;</button></div>' +
+    '<div class="ops-pb">' + note +
+    '<div class="ops-sub" style="margin-bottom:10px;">Name, then return window in days. A new receipt picks up the window for its store.</div>' +
+    stores.map(opsStoreRow).join('') +
+    '<div class="ops-sec"><span>Add a store</span></div>' + opsStoreRow(null) + '</div>' +
+    '<div class="ops-pf"><span class="grow"></span><button class="ops-btn" onclick="opsCloseModal()">Done</button></div>';
+  opsShowModal(html, true);
+}
+async function opsSaveStore(btn) {
+  var row = btn.closest('.ops-store-row');
+  var name = row.querySelector('.ms-name').value.trim();
+  if (!name) { alert('Give the store a name.'); return; }
+  try {
+    await opsCall('POST', { action: 'store_save', id: row.getAttribute('data-id') || undefined, name: name, return_window_days: parseInt(row.querySelector('.ms-days').value, 10) || 0 });
+    await loadOps(); opsOpenStores();
+  } catch (e) { alert(e.message); }
+}
+async function opsDeleteStore(id) {
+  if (!confirm('Delete this store? Receipts you already saved keep their store name.')) return;
+  try { await opsCall('POST', { action: 'store_delete', id: id }); await loadOps(); opsOpenStores(); }
+  catch (e) { alert(e.message); }
+}
+
+// ----- sales to ship -----
 function opsAddShipment() {
   var item = document.getElementById('os-item').value.trim();
   var shipBy = document.getElementById('os-shipby').value || opsToday();
@@ -1169,7 +1496,7 @@ function opsAddShipment() {
   }).catch(function (e) { opsMsg(e.message, true); }).then(function () { btn.disabled = false; });
 }
 
-document.getElementById('op-date').value = opsToday();
+document.getElementById('os-shipby').value = opsToday();
 
 // Auto-load sheet on startup for Finance Pulse
 loadSheet().catch(function(){});
