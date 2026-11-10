@@ -141,7 +141,8 @@ html,body{height:100%;background:#060606;}
 .meal-k{font-family:var(--mono);font-size:10px;color:var(--gold);}
 
 /* RESALE */
-.resale-page{display:flex;flex-direction:column;height:calc(100vh - var(--tab-h));}
+.resale-page{flex-direction:column;height:calc(100vh - var(--tab-h));}
+.resale-page.active{display:flex;}
 .r-topbar{display:flex;align-items:center;gap:8px;padding:10px 18px;border-bottom:1px solid var(--border);background:var(--bg2);flex-shrink:0;flex-wrap:wrap;row-gap:6px;}
 .r-topbar h2{font-size:13px;font-weight:700;margin-right:4px;color:var(--text);}
 .rtab{background:none;border:1px solid var(--border);color:var(--text3);font-family:var(--sans);font-size:10px;padding:4px 10px;border-radius:4px;cursor:pointer;transition:all .15s;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;}
