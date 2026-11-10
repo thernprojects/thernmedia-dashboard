@@ -1,7 +1,7 @@
-// Ops Hub API: purchases (inbound + returns) and shipments (outgoing sales) in Supabase.
+// Ops Hub API: purchases and shipments in Supabase.
 // Env vars needed in Vercel: SUPABASE_URL, SUPABASE_SERVICE_KEY, OPS_PASSCODE
 
-const SB = process.env.SUPABASE_URL;
+const SB = (process.env.SUPABASE_URL || '').trim().replace(/\/+$/, '').replace(/\/(rest|storage|auth)\/v1$/, '').replace(/\/+$/, '');
 const KEY = process.env.SUPABASE_SERVICE_KEY;
 const PASS = process.env.OPS_PASSCODE;
 
