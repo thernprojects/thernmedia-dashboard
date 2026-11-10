@@ -1030,7 +1030,7 @@ function cmdRun(q){
   if(/profit|made|total/.test(l)){cmdSay('Total profit is <b>'+o+'</b>, '+document.getElementById('hud-togo').textContent+'.');return;}
   if(/ops|resale|content|finance|home/.test(l)&&/open|go|show/.test(l)){var m=l.match(/ops|resale|content|finance|home/)[0];switchTab(m);cmdSay('Opening <b>'+m+'</b>.');return;}
   cmdSay('Thinking...');
-  fetch('/api/jarvis',{method:'POST',headers:{'Content-Type':'application/json','x-ops-key':(function(){try{return localStorage.getItem('ops_key')||'';}catch(e){return '';}})()},body:JSON.stringify({message:q})}).then(function(r){return r.json();}).then(function(j){cmdSay(j.reply||j.error||'No answer.');if(j.refresh&&typeof loadOps==='function')loadOps();}).catch(function(){cmdSay('The AI brain is not connected yet. Basic commands work: ship, returns, arriving, profit, open ops.');});
+  fetch('/api/jarvis',{method:'POST',headers:{'Content-Type':'application/json','x-ops-key':(function(){try{return localStorage.getItem('ops_key')||'';}catch(e){return '';}})()},body:JSON.stringify({message:q,today:new Date().toLocaleDateString('en-CA'),context:{profit:document.getElementById('hud-total').textContent,toGo:document.getElementById('hud-togo').textContent,topChannel:document.getElementById('hud-top').textContent,itemsSold:document.getElementById('hud-sold').textContent}})}).then(function(r){return r.json();}).then(function(j){cmdSay(j.reply||j.error||'No answer.');if(j.refresh&&typeof loadOps==='function')loadOps();}).catch(function(){cmdSay('The AI brain is not connected yet. Basic commands work: ship, returns, arriving, profit, open ops.');});
 }
 (function(){
   var inp=document.getElementById('cmd-in');
