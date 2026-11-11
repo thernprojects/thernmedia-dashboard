@@ -363,6 +363,23 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-grad
 .add-panel input,.add-panel select{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:7px 9px;color:var(--text);font-family:var(--sans);font-size:13px;outline:none;min-width:90px;flex:1;}
 .add-panel input.wide{flex:3;min-width:200px;}
 .inv-table td.profit-pos{color:var(--green);}.inv-table td.profit-neg{color:var(--red);}.inv-table td.profit-zero{color:var(--text);}
+.sheet-tabs{display:flex;gap:4px;padding:8px 18px;border-bottom:1px solid var(--border);overflow-x:auto;flex-shrink:0;background:var(--bg2);}
+.stab{background:none;border:1px solid var(--border);color:var(--text3);font-family:var(--sans);font-size:12px;padding:5px 11px;border-radius:4px;cursor:pointer;white-space:nowrap;text-transform:uppercase;letter-spacing:.06em;}
+.stab:hover{color:var(--text2);}.stab.active{background:var(--accent);color:#fff;border-color:var(--gold);}
+.resale-page .grid-only{display:none;}.resale-page.gridmode .grid-only{display:block;}.resale-page.gridmode .inv-only{display:none !important;}
+.grid-table{border-collapse:collapse;font-size:13px;min-width:100%;}
+.grid-table th{position:sticky;top:0;z-index:5;background:var(--bg2);color:var(--text3);font-size:12px;text-transform:uppercase;letter-spacing:.06em;padding:8px 10px;text-align:left;white-space:nowrap;border-bottom:1px solid var(--border);font-weight:400;}
+.grid-table td{padding:7px 10px;border-bottom:1px solid var(--border);color:var(--text2);white-space:nowrap;font-family:var(--mono);font-size:12px;}
+.grid-table td.rn,.grid-table th.rn{color:var(--text3);text-align:right;position:sticky;left:0;background:var(--bg2);z-index:6;}
+.grid-table td.f{color:var(--text3);font-style:italic;}.grid-table td.err{color:var(--red);}
+.grid-table td.ed2{cursor:text;}.grid-table td.ed2:hover{box-shadow:inset 0 0 0 1px rgba(79,216,255,.45);}
+.grid-table tr:hover td{background:var(--bg3);}
+.ed-wrap{display:flex;gap:4px;align-items:center;}
+.ed-b{min-width:30px;min-height:30px;border-radius:4px;border:1px solid var(--border2);background:var(--bg3);color:var(--text);cursor:pointer;font-size:14px;}
+.ed-b.ok{background:var(--accent);border-color:var(--gold);color:#fff;}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--bg4);border:1px solid var(--gold);color:var(--text);font-family:var(--mono);font-size:13px;padding:10px 16px;border-radius:6px;z-index:999;opacity:0;pointer-events:none;transition:opacity .2s;max-width:90vw;}
+.toast.show{opacity:1;}.toast.bad{border-color:var(--red);color:var(--red);}
+.r-btn:disabled{opacity:.4;cursor:default;}
 </style>
 </head>
 <body>
@@ -555,15 +572,16 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-grad
 <div id="page-resale" class="page resale-page">
   <div class="r-topbar">
     <h2>Inventory</h2><span class="inv-src" id="inv-src">Loading from your Google Sheet...</span>
-    <button class="rtab active" id="rf-all" onclick="setFilter('all')">All</button>
-    <button class="rtab" id="rf-unsold" onclick="setFilter('unsold')">Unsold</button>
-    <button class="rtab" id="rf-sold" onclick="setFilter('sold')">Sold</button>
-    <button class="rtab" id="rf-return" onclick="setFilter('return')">Returned</button>
-    <button class="rtab" id="rf-warn" onclick="setFilter('warn')">! Cant Return</button>
-    <button class="r-btn" onclick="toggleAdd()" style="margin-left:auto;">+ Add item</button><button class="r-btn" onclick="loadSheet()">Refresh</button>
+    <button class="inv-only rtab active" id="rf-all" onclick="setFilter('all')">All</button>
+    <button class="inv-only rtab" id="rf-unsold" onclick="setFilter('unsold')">Unsold</button>
+    <button class="inv-only rtab" id="rf-sold" onclick="setFilter('sold')">Sold</button>
+    <button class="inv-only rtab" id="rf-return" onclick="setFilter('return')">Returned</button>
+    <button class="inv-only rtab" id="rf-warn" onclick="setFilter('warn')">! Cant Return</button>
+    <button class="r-btn" id="btn-undo" onclick="sheetUndo()" disabled style="margin-left:auto;" title="Undo (Ctrl+Z)">Undo</button><button class="r-btn" id="btn-redo" onclick="sheetRedo()" disabled title="Redo (Ctrl+Y)">Redo</button><button class="inv-only r-btn" onclick="toggleAdd()">+ Add item</button><button class="r-btn" onclick="refreshAll()">Refresh</button>
     <span style="font-family:var(--mono);font-size:12px;color:var(--text3);" id="inv-count">--</span>
   </div>
-  <div class="r-stats">
+  <div class="sheet-tabs" id="sheet-tabs"></div>
+  <div class="r-stats inv-only">
     <div class="rstat"><label>Total Profit</label><div class="rv pos" id="rs-total">$7,291.89</div><div class="rsub">all platforms</div></div>
     <div class="rstat"><label>TikTok Shop</label><div class="rv pos" id="rs-tiktok">$2,853.21</div><div class="rsub">#1 channel</div></div>
     <div class="rstat"><label>eBay</label><div class="rv pos" id="rs-ebay">$2,088.81</div><div class="rsub">most volume</div></div>
@@ -572,15 +590,15 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-grad
     <div class="rstat"><label>Net After Exp</label><div class="rv pos" id="rs-net">$6,877.11</div><div class="rsub">take-home</div></div>
   </div>
   <div class="r-controls">
-    <input class="inv-search" type="text" id="inv-search" placeholder="Search item, platform, size..." oninput="renderTable()"/>
-    <select class="r-select" id="filter-platform" onchange="renderTable()">
+    <input class="inv-search" type="text" id="inv-search" placeholder="Search item, platform, size..." oninput="searchInput()"/>
+    <select class="inv-only r-select" id="filter-platform" onchange="renderTable()">
       <option value="">All Platforms</option>
       <option>Mercari</option><option>Ebay</option><option>In Person</option>
       <option>StockX</option><option>Cashout</option><option>FBT Tiktok</option>
       <option>Whatnot</option><option>Locations Sold</option>
       <option>Unsold</option><option>Return/Cancel</option><option>Kept</option>
     </select>
-    <select class="r-select" id="sort-col" onchange="renderTable()">
+    <select class="inv-only r-select" id="sort-col" onchange="renderTable()">
       <option value="">Sort by...</option>
       <option value="profit-desc">Profit High</option>
       <option value="profit-asc">Profit Low</option>
@@ -590,7 +608,7 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-grad
       <option value="name-asc">Name A-Z</option>
     </select>
   </div>
-  <div class="add-panel" id="add-panel">
+  <div class="add-panel inv-only" id="add-panel">
     <input class="wide" id="ad-item" placeholder="Item name"/>
     <input id="ad-from" placeholder="Purchased from"/>
     <input id="ad-size" placeholder="Size"/>
@@ -603,7 +621,7 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-grad
     <input id="ad-order" placeholder="Order # or note"/>
     <button class="r-btn" onclick="addItem()">Save to Sheet</button>
   </div>
-  <div class="inv-table-wrap">
+  <div class="inv-table-wrap inv-only" id="inv-wrap">
     <table class="inv-table">
       <thead>
         <tr>
@@ -615,6 +633,7 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-grad
       </tbody>
     </table>
   </div>
+  <div class="inv-table-wrap grid-only" id="grid-wrap"></div>
 </div>
 
 <!-- ===== OPS ===== -->
@@ -774,7 +793,7 @@ async function loadSheet(silent) {
     var res = await fetch(CSV_URL + '?t=' + Date.now());
     var data = await res.json();
     SHEET_EDIT = !!(data['Inventory'] && data['Inventory'][0] && data['Inventory'][0]._row);
-    setInvSrc(SHEET_EDIT ? 'Click any cell to edit. Saves to your Google Sheet. Updated ' + new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'}) : 'Read only. Sheet script not installed yet. Updated ' + new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'}));
+    if(curTab==='Inventory') setInvSrc(SHEET_EDIT ? 'Click any cell to edit. Saves to your Google Sheet. Updated ' + new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'}) : 'Read only. Sheet script not installed yet. Updated ' + new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'}));
     allSheetData = data;
     // Inventory is now an array of objects
     var inv = data['Inventory'] || [];
@@ -819,17 +838,17 @@ function updateLiveNumbers(data) {
   // Sum from eBay Sales sheet
   (data['eBay Sales']||[]).forEach(function(r){
     var n={}; Object.keys(r).forEach(function(k){n[k.trim()]=r[k];});
-    totals.ebay += parseMoney(n['Profit']||0);
+    totals.ebay += parseMoney(n['Profits']!==undefined?n['Profits']:(n['Profit']||0));
   });
   // Mercari Sales
   (data['Mercari Sales']||[]).forEach(function(r){
     var n={}; Object.keys(r).forEach(function(k){n[k.trim()]=r[k];});
-    totals.mercari += parseMoney(n['Profit']||0);
+    totals.mercari += parseMoney(n['Profits']!==undefined?n['Profits']:(n['Profit']||0));
   });
   // StockX
   (data['StockX']||[]).forEach(function(r){
     var n={}; Object.keys(r).forEach(function(k){n[k.trim()]=r[k];});
-    totals.stockx += parseMoney(n['Profit']||0);
+    totals.stockx += parseMoney(n['Profits']!==undefined?n['Profits']:(n['Profit']||0));
   });
   // TikTok Shop - find PROFIT column
   var ttRows = data['TikTok Shop']||[];
@@ -927,10 +946,7 @@ function renderTable() {
       return av<bv?-sd:av>bv?sd:0;
     });
   } else {
-    rows.sort(function(a,b){
-      var sa=(a.status||'Unsold'), sb=(b.status||'Unsold');
-      return sa<sb?-1:sa>sb?1:0;
-    });
+    rows.sort(function(a,b){ return (a._row||a._idx)-(b._row||b._idx); });
   }
 
   document.getElementById('inv-count').textContent = rows.length + ' items';
@@ -969,8 +985,8 @@ function renderTable() {
       +'<td class="'+profClass+'" style="font-family:var(--mono);font-size:13px;">'+(r.profit<0?'-':ps)+'$'+Math.abs(r.profit).toFixed(2)+'</td>'
       +ed('Status','<span class="pill-s '+pc+'">'+opsEsc(sl)+'</span>',r.status)
       +ed('Payment Method',opsEsc(r.pay),r.pay)
-      +ed('Date Purchase',r.bought||'--',r.bought,null,mono+'color:var(--text3);')
-      +ed('Date Sold',r.dateSold?opsEsc(r.dateSold.split('T')[0]):'--',r.dateSold?r.dateSold.split('T')[0]:'',null,mono+'color:var(--text3);')
+      +ed('Date Purchase',r.bought?fmtDate(r.bought):'--',fmtDate(r.bought),null,mono+'color:var(--text3);')
+      +ed('Date Sold',r.dateSold?fmtDate(r.dateSold):'--',fmtDate(r.dateSold),null,mono+'color:var(--text3);')
       +ed('Order #',(r.warn?'<span class="warn-badge">! '+r.warn+'</span> ':'')+opsEsc(r.orderNum),r.orderNum)
       +'</tr>';
   }).join('');
@@ -1074,8 +1090,12 @@ function cmdRun(q){
 Globe.init();Globe.start();
 
 // ===== SHEET EDITING =====
-var SHEET_EDIT=false, invEditing=false;
+var SHEET_EDIT=false, invEditing=false, gridEditing=false;
 var INV_STATUS=['Unsold','Return/Cancel','Kept','Mercari','Ebay','In Person','StockX','Cashout','FBT Tiktok','Whatnot','Locations Sold','OfferUp','Facebook'];
+var SHEET_TABS=['Inventory','eBay Sales','Mercari Sales','Cashouts','TikTok Shop','FBT','InPerson Sales','Expenses','StockX','Subscriptions','Summary'];
+var curTab='Inventory', GRID={}, undoStack=[], redoStack=[];
+function fmtDate(v){var t=String(v||'').split('T')[0];var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(t);return m?(+m[2])+'/'+(+m[3])+'/'+m[1]:t;}
+function toast(t,bad){var e=document.getElementById('toast');if(!e){e=document.createElement('div');e.id='toast';document.body.appendChild(e);}e.textContent=t;e.className='toast'+(bad?' bad':'')+' show';clearTimeout(toast._t);toast._t=setTimeout(function(){e.className='toast'+(bad?' bad':'');},3500);}
 function setInvSrc(t,cls){var e=document.getElementById('inv-src');if(e){e.textContent=t;e.className='inv-src'+(cls?' '+cls:'');}}
 function statusOptions(cur){var l=INV_STATUS.slice();if(cur&&l.indexOf(cur)<0)l.push(cur);return l;}
 (function(){var sel=document.getElementById('ad-status');if(sel)sel.innerHTML=INV_STATUS.map(function(x){return '<option>'+x+'</option>';}).join('');})();
@@ -1084,28 +1104,63 @@ function sheetPost(body){
   if(!opsKey()) return Promise.reject(new Error('Set your passcode on the Ops tab first.'));
   return fetch('/api/sheetedit',{method:'POST',headers:{'Content-Type':'application/json','x-ops-key':opsKey()},body:JSON.stringify(body)}).then(function(r){return r.json();}).then(function(j){if(j.error)throw new Error(j.error);return j;});
 }
+// shared cell editor: Enter or the check saves, Esc or the x cancels, clicking away saves
+function openEditor(td,val,opts,onSave,onCancel){
+  var el;
+  if(opts){el=document.createElement('select');opts.forEach(function(o){var op=document.createElement('option');op.textContent=o;if(o===val)op.selected=true;el.appendChild(op);});}
+  else{el=document.createElement('input');el.value=val;}
+  el.className='cell-in';
+  var ok=document.createElement('button');ok.type='button';ok.className='ed-b ok';ok.textContent='✓';ok.title='Save';
+  var no=document.createElement('button');no.type='button';no.className='ed-b';no.textContent='✕';no.title='Cancel';
+  var w=document.createElement('div');w.className='ed-wrap';w.appendChild(el);w.appendChild(ok);w.appendChild(no);
+  td.innerHTML='';td.appendChild(w);el.focus();if(el.select&&!opts)el.select();
+  var done=false;
+  function end(save){if(done)return;done=true;if(save&&el.value!==val)onSave(el.value);else onCancel();}
+  [ok,no].forEach(function(b){b.addEventListener('mousedown',function(e){e.preventDefault();});});
+  ok.addEventListener('click',function(){end(true);});
+  no.addEventListener('click',function(){end(false);});
+  el.addEventListener('blur',function(){end(true);});
+  el.addEventListener('keydown',function(ev){if(ev.key==='Enter')end(true);if(ev.key==='Escape')end(false);});
+  if(opts)el.addEventListener('change',function(){end(true);});
+}
+// undo and redo
+function updUR(){var u=document.getElementById('btn-undo'),r=document.getElementById('btn-redo');if(u)u.disabled=!undoStack.length;if(r)r.disabled=!redoStack.length;}
+function pushUndo(e){undoStack.push(e);if(undoStack.length>50)undoStack.shift();redoStack=[];updUR();}
+function mergeInvRow(r,obj){var p=obj?parseRows([obj])[0]:null;if(p){var keep=r._idx;Object.keys(p).forEach(function(k){r[k]=p[k];});r._idx=keep;}}
+function invWrite(row,field,value,expectItem){return sheetPost({action:'edit',row:row,field:field,value:value,expectItem:expectItem});}
+function applyEntry(e,useOld){
+  var val=useOld?e.old:e.nw, expect=useOld?e.nw:e.old;
+  if(e.kind==='inv'){
+    var r=rawRows.filter(function(x){return x._row===e.row;})[0];
+    var expItem=e.field==='Item'?expect:(r?r.item:undefined);
+    return invWrite(e.row,e.field,val,expItem).then(function(j){if(r)mergeInvRow(r,j.row);});
+  }
+  return sheetPost({action:'setcell',tab:e.tab,row:e.row,col:e.col,value:val,expect:expect}).then(function(j){if(GRID[e.tab])GRID[e.tab].values[e.row-1][e.col-1]=j.display;});
+}
+function refreshView(){if(curTab==='Inventory')renderTable();else renderGrid();setTimeout(function(){if(curTab==='Inventory')loadSheet(true);else loadGrid(curTab,true);},1200);}
+function sheetUndo(){var e=undoStack.pop();updUR();if(!e)return;setInvSrc('Undoing...');applyEntry(e,true).then(function(){redoStack.push(e);updUR();refreshView();toast('Undone');setInvSrc('Undone, saved to your Google Sheet','ok');}).catch(function(err){undoStack.push(e);updUR();toast(err.message,true);setInvSrc(err.message,'err');});}
+function sheetRedo(){var e=redoStack.pop();updUR();if(!e)return;setInvSrc('Redoing...');applyEntry(e,false).then(function(){undoStack.push(e);updUR();refreshView();toast('Redone');setInvSrc('Redone, saved to your Google Sheet','ok');}).catch(function(err){redoStack.push(e);updUR();toast(err.message,true);setInvSrc(err.message,'err');});}
+document.addEventListener('keydown',function(e){
+  var pg=document.getElementById('page-resale');if(!pg||!pg.classList.contains('active'))return;
+  var t=e.target&&e.target.tagName;if(t==='INPUT'||t==='SELECT'||t==='TEXTAREA')return;
+  if((e.ctrlKey||e.metaKey)&&!e.shiftKey&&e.key.toLowerCase()==='z'){e.preventDefault();sheetUndo();}
+  else if((e.ctrlKey||e.metaKey)&&(e.key.toLowerCase()==='y'||(e.shiftKey&&e.key.toLowerCase()==='z'))){e.preventDefault();sheetRedo();}
+});
+// inventory table editing
 function startEdit(td){
-  var f=td.dataset.f,v=td.dataset.v||'',el;
-  if(f==='Status'){el=document.createElement('select');statusOptions(v).forEach(function(o){var op=document.createElement('option');op.textContent=o;if(o===v)op.selected=true;el.appendChild(op);});}
-  else{el=document.createElement('input');el.value=v;}
-  el.className='cell-in';td.innerHTML='';td.appendChild(el);el.focus();if(el.select&&f!=='Status')el.select();
-  invEditing=true;var done=false;
-  function finish(save){if(done)return;done=true;invEditing=false;if(save&&el.value!==v)commitEdit(td,el.value);else renderTable();}
-  el.addEventListener('blur',function(){finish(true);});
-  el.addEventListener('keydown',function(ev){if(ev.key==='Enter')el.blur();if(ev.key==='Escape')finish(false);});
-  if(f==='Status')el.addEventListener('change',function(){el.blur();});
+  var f=td.dataset.f,v=td.dataset.v||'';invEditing=true;
+  openEditor(td,v,f==='Status'?statusOptions(v):null,function(nv){invEditing=false;commitEdit(td,nv);},function(){invEditing=false;renderTable();});
 }
 function commitEdit(td,val){
-  var row=+td.dataset.row,f=td.dataset.f;
+  var row=+td.dataset.row,f=td.dataset.f,old=td.dataset.v||'';
   var r=rawRows.filter(function(x){return x._row===row;})[0];
   if(!r){renderTable();return;}
   setInvSrc('Saving to your Google Sheet...');
-  sheetPost({action:'edit',row:row,field:f,value:val,expectItem:r.item}).then(function(j){
-    var p=j.row?parseRows([j.row])[0]:null;
-    if(p){var keep=r._idx;Object.keys(p).forEach(function(k){r[k]=p[k];});r._idx=keep;}
-    renderTable();setInvSrc('Saved to your Google Sheet','ok');
+  invWrite(row,f,val,r.item).then(function(j){
+    mergeInvRow(r,j.row);renderTable();setInvSrc('Saved to your Google Sheet','ok');toast('Saved to your Google Sheet');
+    pushUndo({kind:'inv',row:row,field:f,old:old,nw:val});
     setTimeout(function(){loadSheet(true);},1200);
-  }).catch(function(e){renderTable();setInvSrc(e.message,'err');});
+  }).catch(function(e){renderTable();setInvSrc(e.message,'err');toast(e.message,true);});
 }
 function addItem(){
   var g=function(i){return document.getElementById(i).value.trim();};
@@ -1114,10 +1169,61 @@ function addItem(){
   setInvSrc('Adding to your Google Sheet...');
   sheetPost({action:'add',fields:f}).then(function(){
     ['ad-item','ad-from','ad-size','ad-sub','ad-tax','ad-ship','ad-pay','ad-bought','ad-order'].forEach(function(i){document.getElementById(i).value='';});
-    setInvSrc('Added to your Google Sheet','ok');loadSheet(true);
-  }).catch(function(e){setInvSrc(e.message,'err');});
+    setInvSrc('Added to your Google Sheet','ok');toast('Added to your Google Sheet');loadSheet(true);
+  }).catch(function(e){setInvSrc(e.message,'err');toast(e.message,true);});
 }
 document.getElementById('inv-body').addEventListener('click',function(e){var td=e.target.closest&&e.target.closest('td.ed');if(!td||td.querySelector('input,select'))return;startEdit(td);});
+// other tabs: a full copy of the Sheet
+function buildTabs(){document.getElementById('sheet-tabs').innerHTML=SHEET_TABS.map(function(n){return '<button class="stab'+(n===curTab?' active':'')+'" data-tab="'+opsEsc(n)+'">'+opsEsc(n)+'</button>';}).join('');}
+document.getElementById('sheet-tabs').addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.stab');if(b)setTab(b.dataset.tab);});
+function setTab(n){
+  curTab=n;buildTabs();
+  document.getElementById('page-resale').classList.toggle('gridmode',n!=='Inventory');
+  if(n==='Inventory'){renderTable();setInvSrc(SHEET_EDIT?'Click any cell to edit. Saves to your Google Sheet.':'Read only. Sheet script not installed yet.');}
+  else{if(GRID[n])renderGrid();loadGrid(n,!!GRID[n]);}
+}
+function searchInput(){if(curTab==='Inventory')renderTable();else renderGrid();}
+function refreshAll(){if(curTab==='Inventory')loadSheet();else loadGrid(curTab);}
+function loadGrid(n,silent){
+  var wrap=document.getElementById('grid-wrap');
+  if(!opsKey()){wrap.innerHTML='<div class="loading-row" style="padding:30px;color:var(--text3);font-family:var(--mono);">Set your passcode on the Ops tab to view the full Sheet.</div>';return;}
+  if(!silent&&!GRID[n]){wrap.innerHTML='<div class="loading-row" style="padding:30px;color:var(--text3);font-family:var(--mono);">Loading '+opsEsc(n)+' from your Google Sheet...</div>';}
+  fetch('/api/sheetedit?tab='+encodeURIComponent(n),{headers:{'x-ops-key':opsKey()}}).then(function(r){return r.json();}).then(function(j){
+    if(j.error)throw new Error(j.error);
+    GRID[n]=j;
+    if(j.tabs&&j.tabs.length&&j.tabs.join('|')!==SHEET_TABS.join('|')){SHEET_TABS=j.tabs;buildTabs();}
+    if(curTab===n&&!gridEditing){renderGrid();setInvSrc('Click any cell to edit. Greyed cells are formulas, change those in the Sheet. Updated '+new Date().toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}));}
+  }).catch(function(e){if(!silent){wrap.innerHTML='<div class="loading-row" style="padding:30px;color:var(--red);font-family:var(--mono);">'+opsEsc(e.message)+'</div>';}});
+}
+function renderGrid(){
+  var g=GRID[curTab],wrap=document.getElementById('grid-wrap');if(!g||!g.values)return;
+  var q=(document.getElementById('inv-search').value||'').toLowerCase(),V=g.values,F=g.formulas||[],top=wrap.scrollTop;
+  var html='<table class="grid-table"><thead><tr><th class="rn">#</th>'+(V[0]||[]).map(function(h){return '<th>'+opsEsc(h)+'</th>';}).join('')+'</tr></thead><tbody>';
+  var shown=0,count=0;
+  for(var i=1;i<V.length&&shown<5000;i++){
+    var row=V[i];if(!row.some(function(x){return x!=='';}))continue;
+    if(q&&row.join(' ').toLowerCase().indexOf(q)<0)continue;
+    shown++;
+    html+='<tr><td class="rn">'+(i+1)+'</td>'+row.map(function(v,c){var isF=(F[i]||'').charAt(c)==='1',err=/^#(REF|N\/A|VALUE|DIV|NAME|NUM|NULL|ERROR)/.test(v);return '<td class="'+(isF?'f':'ed2')+(err?' err':'')+'" data-r="'+(i+1)+'" data-c="'+(c+1)+'">'+opsEsc(v)+'</td>';}).join('')+'</tr>';
+  }
+  wrap.innerHTML=html+'</tbody></table>';wrap.scrollTop=top;
+  var cnt=document.getElementById('inv-count');if(cnt)cnt.textContent=shown+' rows';
+}
+document.getElementById('grid-wrap').addEventListener('click',function(e){
+  var td=e.target.closest&&e.target.closest('td.ed2');if(!td||td.querySelector('input,select'))return;
+  var r=+td.dataset.r,c=+td.dataset.c,g=GRID[curTab],v=g.values[r-1][c-1],tab=curTab;gridEditing=true;
+  openEditor(td,v,null,function(nv){gridEditing=false;commitGrid(tab,r,c,v,nv);},function(){gridEditing=false;renderGrid();});
+});
+function commitGrid(tab,r,c,old,nv){
+  setInvSrc('Saving to your Google Sheet...');
+  sheetPost({action:'setcell',tab:tab,row:r,col:c,value:nv,expect:old}).then(function(j){
+    GRID[tab].values[r-1][c-1]=j.display;renderGrid();setInvSrc('Saved to your Google Sheet','ok');toast('Saved to your Google Sheet');
+    pushUndo({kind:'grid',tab:tab,row:r,col:c,old:old,nw:j.display});
+    setTimeout(function(){loadGrid(tab,true);},1200);
+  }).catch(function(e){renderGrid();setInvSrc(e.message,'err');toast(e.message,true);});
+}
+setInterval(function(){var p=document.getElementById('page-resale');if(curTab!=='Inventory'&&!gridEditing&&!document.hidden&&p&&p.classList.contains('active'))loadGrid(curTab,true);},60000);
+buildTabs();
 
 function switchTab(tab) {
   document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
