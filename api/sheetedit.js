@@ -23,6 +23,8 @@ export default async function handler(req, res) {
       payload.fields = b.fields || {};
     } else if (b.action === 'setcell') {
       payload.tab = b.tab; payload.row = b.row; payload.col = b.col; payload.value = b.value; payload.expect = b.expect;
+    } else if (['setcells','delrows','insrows','restore','addopt'].indexOf(b.action) >= 0) {
+      ['tab','cells','rows','row','count','fill','backup','col','value'].forEach(function (k) { if (b[k] !== undefined) payload[k] = b[k]; });
     } else {
       return res.status(400).json({ error: 'Unknown action' });
     }
