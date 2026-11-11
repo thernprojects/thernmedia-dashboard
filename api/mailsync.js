@@ -20,7 +20,7 @@ const TOOL = { name: 'report_orders', description: 'Report every purchase or shi
 async function extract(emails) {
   const text = emails.map(e => '[' + e.id + '] ' + e.date + ' | ' + e.from + ' | ' + e.subject + '\n' + e.body).join('\n\n');
   const r = await fetch('https://api.anthropic.com/v1/messages', { method: 'POST', headers: { 'x-api-key': AKEY, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
-    body: JSON.stringify({ model: MODEL, max_tokens: 4000, tools: [TOOL], tool_choice: { type: 'tool', name: 'report_orders' },
+    body: JSON.stringify({ model: MODEL, max_tokens: 3000, tools: [TOOL], tool_choice: { type: 'tool', name: 'report_orders' },
       system: 'You read order, shipping and delivery emails for a reseller. Report each real purchase made BY the account owner (ignore marketing, receipts for things they sold, and duplicates). One entry per order number. Use the email_id of the best email for that order. Dates are YYYY-MM-DD. Only include fields you can see in the email; never guess. Carrier is USPS, UPS, FedEx, Amazon or other.',
       messages: [{ role: 'user', content: text }] }) });
   const j = await r.json();
@@ -28,6 +28,8 @@ async function extract(emails) {
   const u = (j.content || []).find(c => c.type === 'tool_use');
   return u && u.input && u.input.orders ? u.input.orders : [];
 }
+
+export const config = { maxDuration: 60 };
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
@@ -46,7 +48,7 @@ export default async function handler(req, res) {
         const r = await fetch(s.url + (s.url.includes('?') ? '&' : '?') + 'token=' + encodeURIComponent(s.token), { redirect: 'follow' });
         const j = JSON.parse(await r.text());
         if (j.error) throw new Error(j.error);
-        const emails = (j.emails || []).slice(0, 40);
+        const emails = (j.emails || []).slice(0, 25).map(e => ({ ...e, body: String(e.body || '').slice(0, 900) }));
         report.accounts.push({ name: s.name, emails: emails.length });
         if (!emails.length) continue;
         const orders = await extract(emails);
