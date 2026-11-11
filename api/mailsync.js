@@ -20,13 +20,16 @@ const TOOL = { name: 'report_orders', description: 'Report every purchase or shi
 async function extract(emails) {
   const text = emails.map(e => '[' + e.id + '] ' + e.date + ' | ' + e.from + ' | ' + e.subject + '\n' + e.body).join('\n\n');
   const r = await fetch('https://api.anthropic.com/v1/messages', { method: 'POST', headers: { 'x-api-key': AKEY, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
-    body: JSON.stringify({ model: MODEL, max_tokens: 4000, tools: [TOOL], tool_choice: { type: 'tool', name: 'report_orders' },
-      system: 'You read order, shipping and delivery emails for a reseller. Classify every real transaction email: purchase (owner bought something), sale (owner sold an item, include platform, item name, amount), shipping_label (postage receipt, include amount), offer (a buyer offer on their listing, include item and amount). Ignore pure marketing. One entry per order number or item. Use the email_id of the best email for that order. Dates are YYYY-MM-DD. Only include fields you can see in the email; never guess. Carrier is USPS, UPS, FedEx, Amazon or other.',
+    body: JSON.stringify({ model: MODEL, max_tokens: 4000, tools: [TOOL],
+      system: 'You read order, shipping and delivery emails for a reseller. Classify every real transaction email: purchase (owner bought something), sale (owner sold an item, include platform, item name, amount), shipping_label (postage receipt, include amount), offer (a buyer offer on their listing, include item and amount). Ignore pure marketing. One entry per order number or item. Use the email_id of the best email for that order. Dates are YYYY-MM-DD. Only include fields you can see in the email; never guess. Carrier is USPS, UPS, FedEx, Amazon or other. You must answer by calling the report_orders tool once.',
       messages: [{ role: 'user', content: text }] }) });
   const j = await r.json();
   if (!r.ok) throw new Error((j.error && j.error.message) || 'Anthropic error');
   const u = (j.content || []).find(c => c.type === 'tool_use');
-  return u && u.input && u.input.orders ? u.input.orders : [];
+  if (u && u.input && Array.isArray(u.input.orders)) return u.input.orders;
+  const tx = (j.content || []).filter(c => c.type === 'text').map(c => c.text).join('');
+  try { const m = tx.match(/\{[\s\S]*\}/); if (m) { const o = JSON.parse(m[0]); if (Array.isArray(o.orders)) return o.orders; } } catch (e) {}
+  return [];
 }
 
 export const config = { maxDuration: 60 };
