@@ -49,7 +49,7 @@ export default async function handler(req, res) {
         const r = await fetch(s.url + (s.url.includes('?') ? '&' : '?') + 'token=' + encodeURIComponent(s.token), { redirect: 'follow' });
         const j = JSON.parse(await r.text());
         if (j.error) throw new Error(j.error);
-        const emails = (j.emails || []).slice(0, 40).map(e => ({ ...e, body: String(e.body || '').slice(0, 700) }));
+        const emails = (j.emails || []).slice(0, 60).map(e => ({ ...e, body: String(e.body || '').slice(0, 700) }));
         report.accounts.push({ name: s.name, emails: emails.length });
         if (!emails.length) continue;
         const parts = []; for (let i = 0; i < emails.length; i += 20) parts.push(emails.slice(i, i + 20));
