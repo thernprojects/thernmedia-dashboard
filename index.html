@@ -650,6 +650,7 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-grad
     <span class="ops-date" id="ops-date"></span>
     <div class="ops-head-btns">
       <button class="ops-btn primary" onclick="opsOpenReceipt(null)">+ New receipt</button>
+      <button class="ops-btn" onclick="opsScanMail(this)">Scan email</button>
       <button class="ops-btn" onclick="opsOpenStores()">Stores</button>
       <button class="ops-btn" onclick="loadOps()">Refresh</button>
       <button class="ops-btn" onclick="opsSetKey()">Passcode</button>
@@ -1547,6 +1548,19 @@ function opsDays(from, to) { return Math.round((Date.parse(to) - Date.parse(from
 function opsAddDays(iso, n) { var d = new Date(iso + 'T00:00:00Z'); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); }
 function opsEsc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
 function opsMsg(t, err) { var m = document.getElementById('ops-msg'); m.textContent = t || ''; m.className = 'ops-msg' + (err ? ' err' : ''); }
+async function opsScanMail(btn) {
+  if (!opsKey()) { opsMsg('Set your passcode first.', true); return; }
+  btn.disabled = true; opsMsg('Scanning your email...');
+  try {
+    const r = await fetch('/api/mailsync', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-ops-key': opsKey() }, body: '{}' });
+    const j = await r.json();
+    if (j.error) throw new Error(j.error);
+    const acc = (j.accounts || []).map(function (a) { return a.name + ' ' + a.emails; }).join(', ');
+    opsMsg('Email scan done. Added ' + j.added + ', updated ' + j.updated + '. Checked: ' + acc + (j.errors && j.errors.length ? '. Problems: ' + j.errors.join('; ') : ''), !!(j.errors && j.errors.length));
+    loadOps();
+  } catch (e) { opsMsg(e.message, true); }
+  btn.disabled = false;
+}
 function opsKey() { try { return localStorage.getItem('ops_key') || ''; } catch (e) { return ''; } }
 function opsSetKey() {
   var k = prompt('Enter your Ops passcode');
