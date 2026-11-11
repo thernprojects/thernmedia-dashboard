@@ -1558,7 +1558,7 @@ async function opsScanMail(btn) {
     const txt = await r.text(); let j; try { j = JSON.parse(txt); } catch (e) { throw new Error('The scan did not finish (' + r.status + '). ' + txt.slice(0, 120)); }
     if (j.error) throw new Error(j.error);
     const acc = (j.accounts || []).map(function (a) { return a.name + ' ' + a.emails; }).join(', ');
-    opsMsg('Email scan done. Added ' + j.added + ', updated ' + j.updated + '. Checked: ' + acc + (j.errors && j.errors.length ? '. Problems: ' + j.errors.join('; ') : ''), !!(j.errors && j.errors.length));
+    opsMsg('Email scan done. New purchases ' + j.added + ', updated ' + j.updated + ', sales to ship ' + (j.sales || 0) + ', postage $' + (j.labels || 0).toFixed(2) + ', offers ' + (j.offers || []).length + '. Checked: ' + acc + (j.errors && j.errors.length ? '. Problems: ' + j.errors.join('; ') : ''), !!(j.errors && j.errors.length));
     loadOps();
   } catch (e) { opsMsg(e.message, true); }
   btn.disabled = false;
