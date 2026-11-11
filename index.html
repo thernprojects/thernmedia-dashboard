@@ -1552,8 +1552,10 @@ async function opsScanMail(btn) {
   if (!opsKey()) { opsMsg('Set your passcode first.', true); return; }
   btn.disabled = true; opsMsg('Scanning your email...');
   try {
-    const r = await fetch('/api/mailsync', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-ops-key': opsKey() }, body: '{}' });
-    const j = await r.json();
+    const ctl = new AbortController(); const tm = setTimeout(function () { ctl.abort(); }, 70000);
+    const r = await fetch('/api/mailsync', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-ops-key': opsKey() }, body: '{}', signal: ctl.signal });
+    clearTimeout(tm);
+    const txt = await r.text(); let j; try { j = JSON.parse(txt); } catch (e) { throw new Error('The scan did not finish (' + r.status + '). ' + txt.slice(0, 120)); }
     if (j.error) throw new Error(j.error);
     const acc = (j.accounts || []).map(function (a) { return a.name + ' ' + a.emails; }).join(', ');
     opsMsg('Email scan done. Added ' + j.added + ', updated ' + j.updated + '. Checked: ' + acc + (j.errors && j.errors.length ? '. Problems: ' + j.errors.join('; ') : ''), !!(j.errors && j.errors.length));
