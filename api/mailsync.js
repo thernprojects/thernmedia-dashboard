@@ -12,16 +12,16 @@ async function sb(path, method, body) {
 }
 
 const TOOL = { name: 'report_orders', description: 'Report every purchase or shipment found in the emails.', input_schema: { type: 'object', properties: { orders: { type: 'array', items: { type: 'object', properties: {
-  email_id: { type: 'string' }, store: { type: 'string' }, order_number: { type: 'string' }, purchase_date: { type: 'string', description: 'YYYY-MM-DD' },
+  email_id: { type: 'string' }, kind: { type: 'string', enum: ['purchase','sale','shipping_label','offer','other'], description: 'purchase = something the owner bought; sale = owner sold an item on Mercari, eBay, TikTok etc; shipping_label = shipping postage receipt; offer = a buyer offer' }, amount: { type: 'number' }, platform: { type: 'string' }, store: { type: 'string' }, order_number: { type: 'string' }, purchase_date: { type: 'string', description: 'YYYY-MM-DD' },
   tracking_number: { type: 'string' }, carrier: { type: 'string' }, expected_delivery: { type: 'string', description: 'YYYY-MM-DD' }, delivered: { type: 'boolean' },
   items: { type: 'array', items: { type: 'object', properties: { name: { type: 'string' }, qty: { type: 'integer' }, unit_cost: { type: 'number' } }, required: ['name'] } } },
-  required: ['email_id', 'store', 'order_number'] } } }, required: ['orders'] } };
+  required: ['email_id', 'kind'] } } }, required: ['orders'] } };
 
 async function extract(emails) {
   const text = emails.map(e => '[' + e.id + '] ' + e.date + ' | ' + e.from + ' | ' + e.subject + '\n' + e.body).join('\n\n');
   const r = await fetch('https://api.anthropic.com/v1/messages', { method: 'POST', headers: { 'x-api-key': AKEY, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
-    body: JSON.stringify({ model: MODEL, max_tokens: 3000, tools: [TOOL], tool_choice: { type: 'tool', name: 'report_orders' },
-      system: 'You read order, shipping and delivery emails for a reseller. Report each real purchase made BY the account owner (ignore marketing, receipts for things they sold, and duplicates). One entry per order number. Use the email_id of the best email for that order. Dates are YYYY-MM-DD. Only include fields you can see in the email; never guess. Carrier is USPS, UPS, FedEx, Amazon or other.',
+    body: JSON.stringify({ model: MODEL, max_tokens: 4000, tools: [TOOL], tool_choice: { type: 'tool', name: 'report_orders' },
+      system: 'You read order, shipping and delivery emails for a reseller. Classify every real transaction email: purchase (owner bought something), sale (owner sold an item, include platform, item name, amount), shipping_label (postage receipt, include amount), offer (a buyer offer on their listing, include item and amount). Ignore pure marketing. One entry per order number or item. Use the email_id of the best email for that order. Dates are YYYY-MM-DD. Only include fields you can see in the email; never guess. Carrier is USPS, UPS, FedEx, Amazon or other.',
       messages: [{ role: 'user', content: text }] }) });
   const j = await r.json();
   if (!r.ok) throw new Error((j.error && j.error.message) || 'Anthropic error');
@@ -42,17 +42,28 @@ export default async function handler(req, res) {
   try {
     const existing = (await sb('purchases?select=id,order_number,tracking_number,delivered')) || [];
     const byOrder = {}; existing.forEach(p => { if (p.order_number) byOrder[String(p.order_number).trim()] = p; });
-    const report = { added: 0, updated: 0, accounts: [], errors: [] };
+    const report = { added: 0, updated: 0, sales: 0, labels: 0, offers: [], accounts: [], errors: [] };
+    const salesSeen = new Set(((await sb('shipments?select=platform,item').catch(() => [])) || []).map(x => (x.platform || '') + '|' + (x.item || '')));
     for (const s of sources) {
       try {
         const r = await fetch(s.url + (s.url.includes('?') ? '&' : '?') + 'token=' + encodeURIComponent(s.token), { redirect: 'follow' });
         const j = JSON.parse(await r.text());
         if (j.error) throw new Error(j.error);
-        const emails = (j.emails || []).slice(0, 25).map(e => ({ ...e, body: String(e.body || '').slice(0, 900) }));
+        const emails = (j.emails || []).slice(0, 40).map(e => ({ ...e, body: String(e.body || '').slice(0, 700) }));
         report.accounts.push({ name: s.name, emails: emails.length });
         if (!emails.length) continue;
-        const orders = await extract(emails);
+        const parts = []; for (let i = 0; i < emails.length; i += 20) parts.push(emails.slice(i, i + 20));
+        const orders = (await Promise.all(parts.map(extract))).flat();
         for (const o of orders) {
+          if (o.kind === 'offer') { report.offers.push((o.platform || '') + ' ' + (o.items && o.items[0] ? o.items[0].name : '') + (o.amount ? ' $' + o.amount : '')); continue; }
+          if (o.kind === 'shipping_label') { report.labels += Number(o.amount) || 0; continue; }
+          if (o.kind === 'sale') {
+            const nm = (o.items && o.items[0] ? o.items[0].name : (o.order_number || 'Sale')).slice(0, 120);
+            const dupe = salesSeen.has((o.platform || '') + '|' + nm);
+            if (!dupe) { try { await sb('shipments', 'POST', { platform: o.platform || 'Mercari', item: nm, ship_by: o.purchase_date || new Date().toISOString().slice(0, 10) }); report.sales++; salesSeen.add((o.platform || '') + '|' + nm); } catch (e) {} }
+            continue;
+          }
+          if (!o.store) continue;
           const on = String(o.order_number || '').trim(); if (!on) continue;
           const have = byOrder[on];
           if (have) {
