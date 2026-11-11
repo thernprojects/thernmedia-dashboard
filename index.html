@@ -380,6 +380,13 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-grad
 .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--bg4);border:1px solid var(--gold);color:var(--text);font-family:var(--mono);font-size:13px;padding:10px 16px;border-radius:6px;z-index:999;opacity:0;pointer-events:none;transition:opacity .2s;max-width:90vw;}
 .toast.show{opacity:1;}.toast.bad{border-color:var(--red);color:var(--red);}
 .r-btn:disabled{opacity:.4;cursor:default;}
+
+.grid-bar{display:flex;gap:6px;flex-wrap:wrap;align-items:center;padding:8px 0;font-family:var(--mono);font-size:11px;color:var(--text3);}
+.grid-bar button{background:transparent;border:1px solid var(--border2,#1f4b55);color:var(--text);padding:5px 10px;border-radius:6px;cursor:pointer;font-family:var(--mono);font-size:11px;}
+.grid-bar button:disabled{opacity:.35;cursor:default;}.grid-bar button.danger{border-color:var(--red);color:var(--red);}
+.grid-table td.rn{cursor:pointer;user-select:none;}.grid-table tr.sel td{background:rgba(0,229,255,.12);}.grid-table tr.sel td.rn{background:rgba(0,229,255,.3);color:#fff;}
+.grid-table td.chk{text-align:center;cursor:pointer;font-size:14px;}
+.grid-table td.dd::after{content:' ▾';color:var(--text3);font-size:9px;}
 </style>
 </head>
 <body>
@@ -633,7 +640,7 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-grad
       </tbody>
     </table>
   </div>
-  <div class="inv-table-wrap grid-only" id="grid-wrap"></div>
+  <div class="grid-only" id="grid-bar"></div><div class="inv-table-wrap grid-only" id="grid-wrap"></div>
 </div>
 
 <!-- ===== OPS ===== -->
@@ -915,7 +922,31 @@ function updateLiveNumbers(data) {
   if(tT){var el=document.getElementById('ds-tiktok');if(el&&!el.value)el.value='$'+tT.toFixed(2);}
   if(tP){var el=document.getElementById('ds-inperson');if(el&&!el.value)el.value='$'+tP.toFixed(2);}
   calcDaily();
-  if(typeof totals!=='undefined'&&typeof total!=='undefined'){var T=totals;homeRender({'TikTok':T.tiktok||0,'eBay':T.ebay||0,'Mercari':T.mercari||0,'In person':T.person||0,'Cashout':T.cashout||0,'StockX':T.stockx||0},total);}
+  if(typeof totals!=='undefined'&&typeof total!=='undefined'){var T=totals;homeRender({'TikTok':T.tiktok||0,'eBay':T.ebay||0,'Mercari':T.mercari||0,'In person':T.person||0,'Cashout':T.cashout||0,'StockX':T.stockx||0},total);window.__tot={T:T,total:total};tabTotals();}
+}
+
+
+// accurate TikTok profit, expenses and net straight from the Sheet tabs
+function colSum(v,names){
+  var h=(v[0]||[]).map(function(x){return String(x).trim().toLowerCase();}),ci=-1;
+  for(var k=0;k<names.length&&ci<0;k++)ci=h.indexOf(names[k]);
+  if(ci<0)return null;var sum=0,bad=[];
+  for(var i=1;i<v.length;i++){var raw=String(v[i][ci]||'').trim();if(!raw)continue;var neg=/^\(|^-/.test(raw),x=parseFloat(raw.replace(/[$,()\-]/g,''));if(isNaN(x))continue;if(neg)x=-x;if(Math.abs(x)>5000){bad.push(i+1);continue;}sum+=x;}
+  return {sum:sum,bad:bad};
+}
+function tabTotals(){
+  if(!opsKey()||!window.__tot)return;
+  var get=function(t){return fetch('/api/sheetedit?tab='+encodeURIComponent(t),{headers:{'x-ops-key':opsKey()}}).then(function(r){return r.json();}).then(function(j){return j&&j.values?j.values:null;}).catch(function(){return null;});};
+  Promise.all([get('TikTok Shop'),get('Expenses')]).then(function(r){
+    var W=window.__tot,T=W.T,total=W.total,money=function(n){return (n<0?'-':'')+'$'+Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});},set=function(id,t){var e=document.getElementById(id);if(e)e.textContent=t;};
+    var tt=r[0]?colSum(r[0],['profit']):null,ex=r[1]?colSum(r[1],['total cost']):null;
+    if(tt){total=total-(T.tiktok||0)+tt.sum;set('rs-tiktok',money(tt.sum));set('fp-tiktok',money(tt.sum).replace(/\.\d\d$/,''));set('fin-tiktok',money(tt.sum).replace(/\.\d\d$/,''));
+      var sub=document.querySelector('#rs-tiktok')&&document.querySelector('#rs-tiktok').parentNode.querySelector('.rsub');if(sub)sub.textContent=tt.bad.length?'check TikTok row '+tt.bad.join(', '):'from TikTok Shop tab';
+      T.tiktok=tt.sum;}
+    set('rs-total',money(total));set('home-profit-stat',money(total).replace(/\.\d\d$/,''));
+    if(ex){set('rs-expenses','-'+money(ex.sum));set('rs-net',money(total-ex.sum));}
+    window.__tot={T:T,total:total};
+  });
 }
 
 function renderTable() {
@@ -1135,9 +1166,18 @@ function applyEntry(e,useOld){
     var expItem=e.field==='Item'?expect:(r?r.item:undefined);
     return invWrite(e.row,e.field,val,expItem).then(function(j){if(r)mergeInvRow(r,j.row);});
   }
+  if(e.kind==='multi')return writeCells(e.tab,e.cells,useOld);
+  if(e.kind==='del'){
+    if(useOld)return sheetPost({action:'restore',tab:e.tab,backup:e.backup});
+    return sheetPost({action:'delrows',tab:e.tab,rows:e.rows}).then(function(j){e.backup=j.backup;});
+  }
+  if(e.kind==='ins'){
+    if(useOld){var rws=[];for(var q=0;q<e.count;q++)rws.push(e.row+q);return sheetPost({action:'delrows',tab:e.tab,rows:rws}).then(function(j){e.backup=j.backup;});}
+    return sheetPost({action:'insrows',tab:e.tab,row:e.row,count:e.count});
+  }
   return sheetPost({action:'setcell',tab:e.tab,row:e.row,col:e.col,value:val,expect:expect}).then(function(j){if(GRID[e.tab])GRID[e.tab].values[e.row-1][e.col-1]=j.display;});
 }
-function refreshView(){if(curTab==='Inventory')renderTable();else renderGrid();setTimeout(function(){if(curTab==='Inventory')loadSheet(true);else loadGrid(curTab,true);},1200);}
+function refreshView(){if(curTab==='Inventory')renderTable();else{selClear();renderGrid();}setTimeout(function(){if(curTab==='Inventory')loadSheet(true);else loadGrid(curTab,true);},1200);}
 function sheetUndo(){var e=undoStack.pop();updUR();if(!e)return;setInvSrc('Undoing...');applyEntry(e,true).then(function(){redoStack.push(e);updUR();refreshView();toast('Undone');setInvSrc('Undone, saved to your Google Sheet','ok');}).catch(function(err){undoStack.push(e);updUR();toast(err.message,true);setInvSrc(err.message,'err');});}
 function sheetRedo(){var e=redoStack.pop();updUR();if(!e)return;setInvSrc('Redoing...');applyEntry(e,false).then(function(){undoStack.push(e);updUR();refreshView();toast('Redone');setInvSrc('Redone, saved to your Google Sheet','ok');}).catch(function(err){redoStack.push(e);updUR();toast(err.message,true);setInvSrc(err.message,'err');});}
 document.addEventListener('keydown',function(e){
@@ -1195,33 +1235,119 @@ function loadGrid(n,silent){
     if(curTab===n&&!gridEditing){renderGrid();setInvSrc('Click any cell to edit. Greyed cells are formulas, change those in the Sheet. Updated '+new Date().toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}));}
   }).catch(function(e){if(!silent){wrap.innerHTML='<div class="loading-row" style="padding:30px;color:var(--red);font-family:var(--mono);">'+opsEsc(e.message)+'</div>';}});
 }
+var SEL=[],lastSel=0,delArm=0,CLIP=null;
+function selClear(){SEL=[];lastSel=0;}
+function rulesFor(c){var g=GRID[curTab];return g&&g.cols?g.cols[c]:null;}
+function renderBar(){
+  var b=document.getElementById('grid-bar');if(!b)return;
+  var n=SEL.length;
+  b.innerHTML='<span>'+(n?n+' row'+(n>1?'s':'')+' selected':'Click a row number to select, shift click for a range, ctrl click to add')+'</span>'
+   +'<button data-a="ins-up"'+(n?'':' disabled')+'>Insert above</button><button data-a="ins-dn"'+(n?'':' disabled')+'>Insert below</button>'
+   +'<button data-a="dup"'+(n?'':' disabled')+'>Duplicate</button><button data-a="copy"'+(n?'':' disabled')+'>Copy rows</button>'
+   +'<button data-a="paste"'+(CLIP&&n?'':' disabled')+'>Paste below</button>'
+   +'<button class="danger" data-a="del"'+(n?'':' disabled')+'>'+(delArm?'Click again to delete '+n:'Delete rows')+'</button>'
+   +'<button data-a="clear"'+(n?'':' disabled')+'>Clear selection</button>';
+}
 function renderGrid(){
   var g=GRID[curTab],wrap=document.getElementById('grid-wrap');if(!g||!g.values)return;
   var q=(document.getElementById('inv-search').value||'').toLowerCase(),V=g.values,F=g.formulas||[],top=wrap.scrollTop;
   var html='<table class="grid-table"><thead><tr><th class="rn">#</th>'+(V[0]||[]).map(function(h){return '<th>'+opsEsc(h)+'</th>';}).join('')+'</tr></thead><tbody>';
-  var shown=0,count=0;
+  var shown=0;
   for(var i=1;i<V.length&&shown<5000;i++){
     var row=V[i];if(!row.some(function(x){return x!=='';}))continue;
     if(q&&row.join(' ').toLowerCase().indexOf(q)<0)continue;
     shown++;
-    html+='<tr><td class="rn">'+(i+1)+'</td>'+row.map(function(v,c){var isF=(F[i]||'').charAt(c)==='1',err=/^#(REF|N\/A|VALUE|DIV|NAME|NUM|NULL|ERROR)/.test(v);return '<td class="'+(isF?'f':'ed2')+(err?' err':'')+'" data-r="'+(i+1)+'" data-c="'+(c+1)+'">'+opsEsc(v)+'</td>';}).join('')+'</tr>';
+    html+='<tr class="'+(SEL.indexOf(i+1)>=0?'sel':'')+'"><td class="rn" data-r="'+(i+1)+'">'+(i+1)+'</td>'+row.map(function(v,c){
+      var isF=(F[i]||'').charAt(c)==='1',err=/^#(REF|N\/A|VALUE|DIV|NAME|NUM|NULL|ERROR)/.test(v),rl=rulesFor(c+1),cls=isF?'f':'ed2';
+      if(rl&&rl.type==='check'&&!isF){var on=/^true$/i.test(v);return '<td class="chk ed2" data-r="'+(i+1)+'" data-c="'+(c+1)+'" data-chk="1">'+(on?'&#9745;':'&#9744;')+'</td>';}
+      if(rl&&rl.type==='list'&&!isF)cls+=' dd';
+      return '<td class="'+cls+(err?' err':'')+'" data-r="'+(i+1)+'" data-c="'+(c+1)+'">'+opsEsc(v)+'</td>';}).join('')+'</tr>';
   }
   wrap.innerHTML=html+'</tbody></table>';wrap.scrollTop=top;
   var cnt=document.getElementById('inv-count');if(cnt)cnt.textContent=shown+' rows';
+  renderBar();
 }
-document.getElementById('grid-wrap').addEventListener('click',function(e){
-  var td=e.target.closest&&e.target.closest('td.ed2');if(!td||td.querySelector('input,select'))return;
-  var r=+td.dataset.r,c=+td.dataset.c,g=GRID[curTab],v=g.values[r-1][c-1],tab=curTab;gridEditing=true;
-  openEditor(td,v,null,function(nv){gridEditing=false;commitGrid(tab,r,c,v,nv);},function(){gridEditing=false;renderGrid();});
-});
+function gridCells(rows,c,nv){var V=GRID[curTab].values;return rows.map(function(r){return {row:r,col:c,old:V[r-1][c-1],nw:nv};});}
+function writeCells(tab,cells,useOld){
+  return sheetPost({action:'setcells',tab:tab,cells:cells.map(function(k){return {row:k.row,col:k.col,value:useOld?k.old:k.nw,expect:useOld?k.nw:k.old};})}).then(function(){
+    cells.forEach(function(k){GRID[tab].values[k.row-1][k.col-1]=useOld?k.old:k.nw;});
+  });
+}
+function afterWrite(msg){renderGrid();setInvSrc(msg,'ok');toast(msg);setTimeout(function(){loadGrid(curTab,true);},1200);}
+function commitGridMulti(tab,c,rows,nv){
+  var cells=gridCells(rows,c,nv).filter(function(k){return k.old!==nv;});if(!cells.length){renderGrid();return;}
+  setInvSrc('Saving '+cells.length+' cells to your Google Sheet...');
+  writeCells(tab,cells,false).then(function(){pushUndo({kind:'multi',tab:tab,cells:cells});afterWrite('Saved '+cells.length+' rows to your Google Sheet');}).catch(function(e){renderGrid();setInvSrc(e.message,'err');toast(e.message,true);});
+}
 function commitGrid(tab,r,c,old,nv){
+  if(SEL.length>1&&SEL.indexOf(r)>=0){commitGridMulti(tab,c,SEL.slice(),nv);return;}
   setInvSrc('Saving to your Google Sheet...');
   sheetPost({action:'setcell',tab:tab,row:r,col:c,value:nv,expect:old}).then(function(j){
-    GRID[tab].values[r-1][c-1]=j.display;renderGrid();setInvSrc('Saved to your Google Sheet','ok');toast('Saved to your Google Sheet');
-    pushUndo({kind:'grid',tab:tab,row:r,col:c,old:old,nw:j.display});
-    setTimeout(function(){loadGrid(tab,true);},1200);
+    GRID[tab].values[r-1][c-1]=j.display;pushUndo({kind:'grid',tab:tab,row:r,col:c,old:old,nw:j.display});afterWrite('Saved to your Google Sheet');
   }).catch(function(e){renderGrid();setInvSrc(e.message,'err');toast(e.message,true);});
 }
+function startGridEdit(td){
+  var r=+td.dataset.r,c=+td.dataset.c,g=GRID[curTab],v=g.values[r-1][c-1],tab=curTab,rl=rulesFor(c);gridEditing=true;
+  var done=function(nv){gridEditing=false;commitGrid(tab,r,c,v,nv);},cancel=function(){gridEditing=false;renderGrid();};
+  if(rl&&rl.type==='list'){
+    var opts=rl.values.slice();if(v&&opts.indexOf(v)<0)opts.push(v);opts.unshift('');opts.push('+ Add new option...');
+    openEditor(td,v,opts,function(nv){
+      if(nv==='+ Add new option...'){
+        td.innerHTML='';var inp=document.createElement('input');inp.className='cell-in';inp.placeholder='New option';td.appendChild(inp);inp.focus();var fin=false;
+        var go=function(){if(fin)return;fin=true;var t=inp.value.trim();if(!t){cancel();return;}
+          sheetPost({action:'addopt',tab:tab,col:c,value:t}).then(function(j){g.cols[c]={type:'list',values:j.values};done(t);}).catch(function(e){gridEditing=false;renderGrid();toast(e.message,true);});};
+        inp.addEventListener('keydown',function(e){if(e.key==='Enter')go();if(e.key==='Escape'){fin=true;cancel();}});inp.addEventListener('blur',go);
+      }else done(nv);
+    },cancel);
+  }else openEditor(td,v,null,done,cancel);
+}
+function structural(p,msg,entry){
+  setInvSrc(msg+'...');
+  return p.then(function(j){undoStack=[];redoStack=[];pushUndo(entry(j));selClear();delArm=0;loadGrid(curTab,true);toast('Done. Undo is available.');}).catch(function(e){setInvSrc(e.message,'err');toast(e.message,true);});
+}
+function gridAction(a){
+  var tab=curTab,rows=SEL.slice().sort(function(x,y){return x-y;}),V=GRID[tab].values;
+  if(a==='clear'){selClear();delArm=0;renderGrid();return;}
+  if(!rows.length)return;
+  if(a==='del'){
+    if(!delArm){delArm=1;renderBar();setTimeout(function(){delArm=0;renderBar();},4000);return;}
+    delArm=0;
+    structural(sheetPost({action:'delrows',tab:tab,rows:rows}),'Deleting '+rows.length+' rows',function(j){return {kind:'del',tab:tab,rows:rows,backup:j.backup};});
+  }
+  else if(a==='ins-up'||a==='ins-dn'){
+    var at=a==='ins-up'?rows[0]:rows[rows.length-1]+1,cnt=rows.length;
+    structural(sheetPost({action:'insrows',tab:tab,row:at,count:cnt}),'Inserting rows',function(){return {kind:'ins',tab:tab,row:at,count:cnt};});
+  }
+  else if(a==='copy'){CLIP=rows.map(function(r){return V[r-1].slice();});toast(rows.length+' rows copied');renderBar();}
+  else if(a==='dup'||a==='paste'){
+    var data=a==='dup'?rows.map(function(r){return V[r-1].slice();}):CLIP;if(!data||!data.length)return;
+    var at2=rows[rows.length-1]+1,F=GRID[tab].formulas||[];
+    // formula cells are left blank so the sheet formulas from neighbouring rows are not broken
+    var fill=data.map(function(row,ri){return row.map(function(v,ci){return v;});});
+    var seq=Promise.resolve();
+    structural(sheetPost({action:'insrows',tab:tab,row:at2,count:data.length}).then(function(){
+      var cells=[];fill.forEach(function(row,ri){row.forEach(function(v,ci){var isF=(F[rows[Math.min(ri,rows.length-1)]-1]||'').charAt(ci)==='1';if(v!==''&&!isF)cells.push({row:at2+ri,col:ci+1,value:v});});});
+      return sheetPost({action:'setcells',tab:tab,cells:cells});
+    }),(a==='dup'?'Duplicating':'Pasting')+' rows',function(){return {kind:'ins',tab:tab,row:at2,count:data.length};});
+  }
+}
+document.getElementById('grid-bar').addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('button');if(b&&!b.disabled)gridAction(b.dataset.a);});
+document.getElementById('grid-wrap').addEventListener('click',function(e){
+  var rn=e.target.closest&&e.target.closest('td.rn');
+  if(rn&&rn.dataset.r){
+    var r=+rn.dataset.r;
+    if(e.shiftKey&&lastSel){var lo=Math.min(lastSel,r),hi=Math.max(lastSel,r);SEL=[];for(var i=lo;i<=hi;i++){var row=GRID[curTab].values[i-1];if(row&&row.some(function(x){return x!=='';}))SEL.push(i);}}
+    else if(e.ctrlKey||e.metaKey){var k=SEL.indexOf(r);if(k>=0)SEL.splice(k,1);else SEL.push(r);lastSel=r;}
+    else{if(SEL.length===1&&SEL[0]===r)SEL=[];else SEL=[r];lastSel=r;}
+    delArm=0;renderGrid();return;
+  }
+  var td=e.target.closest&&e.target.closest('td.ed2');if(!td||td.querySelector('input,select'))return;
+  if(td.dataset.chk){
+    var r2=+td.dataset.r,c2=+td.dataset.c,old=GRID[curTab].values[r2-1][c2-1],nv=/^true$/i.test(old)?'FALSE':'TRUE';
+    commitGrid(curTab,r2,c2,old,nv);return;
+  }
+  startGridEdit(td);
+});
 setInterval(function(){var p=document.getElementById('page-resale');if(curTab!=='Inventory'&&!gridEditing&&!document.hidden&&p&&p.classList.contains('active'))loadGrid(curTab,true);},60000);
 buildTabs();
 
